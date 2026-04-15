@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GrowthAI Africa</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#0a0e0b; --surface:#141c15; --surface2:#1a241b; --border:#1f2d20; --border2:#253026;
+    --green:#2dce6a; --green2:#1a9447; --green-dim:rgba(45,206,106,0.1);
+    --gold:#f5a623; --gold-dim:rgba(245,166,35,0.1);
+    --red:#ff4d4d; --red-dim:rgba(255,77,77,0.1);
+    --blue:#4d9fff; --blue-dim:rgba(77,159,255,0.1);
+    --purple:#a855f7; --purple-dim:rgba(168,85,247,0.1);
+    --pink:#ec4899; --pink-dim:rgba(236,72,153,0.1);
+    --text:#e8f0e9; --text2:#8fa990; --text3:#4a5e4b;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+
+  /* ── SCREENS ── */
+  .screen{display:none;min-height:100vh;flex-direction:column}
+  .screen.active{display:flex;animation:fadeIn 0.25s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+
+  /* ── BOTTOM NAV ── */
+  .bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(10,14,11,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:8px 0 16px;display:flex;z-index:200}
+  .bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 0;position:relative}
+  .bni-icon{font-size:19px;transition:transform 0.2s}
+  .bni.active .bni-icon{transform:scale(1.15)}
+  .bni-label{font-size:9px;font-weight:600;color:var(--text3);transition:color 0.2s}
+  .bni.active .bni-label{color:var(--green)}
+  .bni-badge{position:absolute;top:2px;right:calc(50% - 18px);background:var(--red);color:white;font-size:8px;font-weight:800;width:14px;height:14px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
+
+  /* ── COMMON ── */
+  .page-header{background:rgba(10,14,11,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:16px 20px 12px;position:sticky;top:0;z-index:100}
+  .ph-row{display:flex;align-items:center;justify-content:space-between}
+  .logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+  .logo span{color:var(--green)}
+  .ph-actions{display:flex;gap:8px}
+  .ph-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
+  .ph-dot{width:7px;height:7px;background:var(--red);border-radius:50%;position:absolute;top:5px;right:5px;border:2px solid var(--bg)}
+
+  .scroll-content{flex:1;overflow-y:auto;padding:16px 16px 90px}
+
+  .sec-title{font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:20px}
+  .sec-link{font-size:11px;color:var(--green);font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0}
+
+  /* CARDS */
+  .card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden}
+  .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:4px}
+  .stat-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;padding:14px;cursor:pointer;transition:border-color 0.2s}
+  .stat-card:hover{border-color:var(--green)}
+  .stat-icon{font-size:18px;margin-bottom:8px}
+  .stat-val{font-family:'Syne',sans-serif;font-size:26px;font-weight:800;line-height:1}
+  .stat-label{font-size:11px;color:var(--text2);margin-top:3px}
+  .stat-chg{font-size:10px;font-weight:700;margin-top:5px;color:var(--green)}
+  .sv-green{color:var(--green)} .sv-gold{color:var(--gold)} .sv-red{color:var(--red)} .sv-blue{color:var(--blue)} .sv-purple{color:var(--purple)} .sv-pink{color:var(--pink)}
+
+  /* ALERT */
+  .alert-card{background:linear-gradient(135deg,rgba(45,206,106,0.12),rgba(45,206,106,0.04));border:1px solid rgba(45,206,106,0.25);border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:18px;cursor:pointer;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{border-color:rgba(45,206,106,0.25)}50%{border-color:rgba(45,206,106,0.5)}}
+
+  /* PROSPECT */
+  .prospect-card{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:12px 14px;display:flex;gap:12px;align-items:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px}
+  .prospect-card:hover{border-color:var(--green);transform:translateX(2px)}
+  .pav{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+  .sbadge{font-size:9px;font-weight:800;padding:3px 8px;border-radius:10px}
+  .sb-hot{background:var(--red-dim);color:var(--red)}
+  .sb-warm{background:var(--gold-dim);color:var(--gold)}
+  .sb-sold{background:var(--green-dim);color:var(--green)}
+
+  /* PLATFORM ROW */
+  .platform-item{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:8px}
+
+  /* TABS */
+  .inner-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;background:rgba(10,14,11,0.97);position:sticky;top:64px;z-index:99}
+  .inner-tabs::-webkit-scrollbar{display:none}
+  .itab{flex-shrink:0;padding:10px 14px;font-size:11px;font-weight:700;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap}
+  .itab.active{color:var(--green);border-bottom-color:var(--green)}
+  .ipage{display:none;padding:16px 16px 10px}
+  .ipage.active{display:block;animation:fadeIn 0.2s ease}
+
+  /* CHAT */
+  .conv-header{padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;position:sticky;top:104px;z-index:98}
+  .chat-area{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:10px;max-height:calc(100vh - 280px)}
+  .bubble-wrap{display:flex;align-items:flex-end;gap:6px}
+  .bubble-wrap.out{flex-direction:row-reverse}
+  .bubble{max-width:78%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.5}
+  .bin{background:var(--surface2);border-radius:4px 16px 16px 16px}
+  .bout{background:var(--green2);border-radius:16px 4px 16px 16px;color:white}
+  .bai{background:rgba(45,206,106,0.08);border:1px solid rgba(45,206,106,0.2);border-radius:4px 16px 16px 16px}
+  .bav{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+  .ai-label{font-size:9px;color:var(--green);font-weight:800;margin-bottom:4px}
+  .chat-input-wrap{padding:10px 14px 16px;background:rgba(10,14,11,0.97);border-top:1px solid var(--border)}
+  .ai-toggle-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding:8px 12px;background:var(--surface);border-radius:10px;border:1px solid var(--border2)}
+  .toggle{width:40px;height:22px;border-radius:11px;background:var(--green);position:relative;cursor:pointer;flex-shrink:0}
+  .toggle::after{content:'';position:absolute;top:3px;left:21px;width:16px;height:16px;border-radius:50%;background:white;transition:left 0.2s}
+  .toggle.off{background:var(--border2)}
+  .toggle.off::after{left:3px}
+  .input-row{display:flex;gap:8px;align-items:flex-end}
+  .chat-input{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;resize:none;min-height:42px;max-height:100px}
+  .chat-input:focus{border-color:var(--green)}
+  .send-btn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0}
+
+  /* PUBLICATIONS */
+  .pub-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-bottom:10px;cursor:pointer;transition:border-color 0.2s}
+  .pub-card:hover{border-color:var(--green)}
+  .pub-img{height:100px;display:flex;align-items:center;justify-content:center;font-size:36px;position:relative}
+  .pub-status{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;padding:3px 10px;border-radius:10px}
+  .ps-sched{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(77,159,255,0.3)}
+  .ps-pub{background:var(--green-dim);color:var(--green);border:1px solid rgba(45,206,106,0.3)}
+  .pub-body{padding:12px 14px}
+
+  /* ADS */
+  .ad-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-bottom:12px}
+  .ad-header{padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border)}
+  .ad-stats{padding:12px 16px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;border-bottom:1px solid var(--border)}
+  .ad-stat{text-align:center}
+  .ad-stat-val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800}
+  .ad-stat-label{font-size:9px;color:var(--text3);margin-top:2px}
+  .ad-footer{padding:12px 16px}
+  .budget-bar{height:5px;background:var(--border2);border-radius:5px;overflow:hidden;margin:6px 0 10px}
+  .budget-fill{height:100%;border-radius:5px;background:var(--green)}
+  .ad-actions{display:flex;gap:6px}
+  .ad-btn{flex:1;padding:8px;border-radius:8px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+  .ab-pause{background:var(--gold-dim);color:var(--gold)}
+  .ab-edit{background:var(--blue-dim);color:var(--blue)}
+  .ad-status{font-size:10px;font-weight:800;padding:4px 10px;border-radius:10px}
+  .as-active{background:var(--green-dim);color:var(--green);border:1px solid rgba(45,206,106,0.25)}
+
+  /* CRM */
+  .client-card{background:var(--surface);border:1px solid var(--border2);border-radius:14px;overflow:hidden;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s}
+  .client-card:hover{border-color:var(--green)}
+  .cc-header{padding:12px 14px;display:flex;align-items:center;gap:12px}
+  .cc-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+  .funnel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+  .funnel-item{background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer}
+  .funnel-item.active-f{border-color:var(--green);background:var(--green-dim)}
+
+  /* SETTINGS */
+  .settings-card{background:var(--surface);border:1px solid var(--border2);border-radius:16px;overflow:hidden;margin-bottom:12px}
+  .settings-item{padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s}
+  .settings-item:last-child{border-bottom:none}
+  .settings-item:hover{background:var(--surface2)}
+  .si-toggle{width:40px;height:22px;border-radius:11px;position:relative;cursor:pointer;flex-shrink:0;transition:background 0.2s}
+  .si-toggle.on{background:var(--green)}
+  .si-toggle.off{background:var(--border2)}
+  .si-toggle::after{content:'';position:absolute;top:3px;width:16px;height:16px;border-radius:50%;background:white;transition:left 0.2s}
+  .si-toggle.off::after{left:3px}
+  .si-toggle.on::after{left:21px}
+
+  /* PROFILE */
+  .profile-hero{background:linear-gradient(135deg,var(--surface),var(--surface2));border-radius:20px;padding:24px;text-align:center;margin-bottom:16px;border:1px solid var(--border2)}
+  .profile-av{width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green2),var(--green));display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px;border:3px solid var(--green)}
+  .profile-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800}
+  .profile-plan{font-size:12px;font-weight:800;padding:4px 12px;border-radius:10px;background:var(--green-dim);color:var(--green);border:1px solid rgba(45,206,106,0.3);display:inline-block;margin-top:6px}
+  .profile-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:16px}
+  .ps-item{background:var(--bg);border-radius:10px;padding:10px;text-align:center}
+  .ps-val{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--green)}
+  .ps-label{font-size:10px;color:var(--text3);margin-top:2px}
+
+  /* NOTIFICATIONS */
+  .notif-item{background:var(--surface);border:1px solid var(--border2);border-radius:14px;padding:14px;display:flex;gap:12px;margin-bottom:8px;cursor:pointer;transition:border-color 0.2s}
+  .notif-item:hover{border-color:var(--green)}
+  .notif-item.unread{border-color:rgba(45,206,106,0.2);background:rgba(45,206,106,0.04)}
+  .notif-icon{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .notif-body{flex:1;min-width:0}
+  .notif-title{font-size:13px;font-weight:700;margin-bottom:3px}
+  .notif-sub{font-size:11px;color:var(--text2);line-height:1.5}
+  .notif-time{font-size:10px;color:var(--text3);margin-top:4px}
+  .unread-dot{width:8px;height:8px;background:var(--green);border-radius:50%;flex-shrink:0;margin-top:4px}
+
+  /* TIPS */
+  .tip{background:var(--green-dim);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:10px 12px;font-size:12px;line-height:1.6;margin:8px 0}
+  .tip strong{color:var(--green)}
+
+  /* ROI HERO */
+  .roi-hero{background:linear-gradient(135deg,rgba(45,206,106,0.12),rgba(45,206,106,0.04));border:1px solid rgba(45,206,106,0.25);border-radius:18px;padding:18px;margin-bottom:16px}
+  .roi-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+  .roi-item{text-align:center}
+  .roi-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1}
+
+  /* CREATE BTN */
+  .create-btn-full{width:100%;padding:14px;border-radius:14px;border:none;background:var(--green);color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px}
+  .create-btn-meta{background:linear-gradient(135deg,#1877f2,#e1306c);color:white}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════
+     SCREEN 1 — DASHBOARD
+════════════════════════════════════ -->
+<div class="screen active" id="screen-dashboard">
+  <div class="page-header">
+    <div class="ph-row">
+      <div class="logo">Growth<span>AI Africa</span></div>
+      <div class="ph-actions">
+        <div class="ph-btn" onclick="goTo('notifications')">🔔<div class="ph-dot"></div></div>
+        <div class="ph-btn" onclick="goTo('profil')" style="background:linear-gradient(135deg,var(--green2),var(--green));color:#000;font-weight:800;font-size:13px">A</div>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-content">
+    <div style="margin-bottom:18px">
+      <div style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">🌅 Mercredi 26 Mars 2026</div>
+      <div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800">Bonjour, <span style="color:var(--green)">Ambera</span> 👋</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">Voici votre résumé commercial du jour</div>
+    </div>
+
+    <div class="alert-card" onclick="goTo('crm')">
+      <div style="font-size:26px">🔴</div>
+      <div><div style="font-size:13px;font-weight:700;color:var(--green)">3 prospects chauds en attente !</div><div style="font-size:11px;color:var(--text2);margin-top:2px">Répondez maintenant pour ne pas perdre ces ventes</div></div>
+      <div style="color:var(--green);font-size:16px;margin-left:auto">→</div>
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-card" onclick="goTo('conversations')"><div class="stat-icon">💬</div><div class="stat-val sv-blue">47</div><div class="stat-label">Messages reçus</div><div class="stat-chg">↑ +12 aujourd'hui</div></div>
+      <div class="stat-card" onclick="goTo('crm')"><div class="stat-icon">🔥</div><div class="stat-val sv-red">3</div><div class="stat-label">Prospects chauds</div><div class="stat-chg">↑ +1 ce matin</div></div>
+      <div class="stat-card" onclick="goTo('publications')"><div class="stat-icon">📝</div><div class="stat-val sv-purple">5</div><div class="stat-label">Posts planifiés</div><div class="stat-chg">↑ 2 aujourd'hui</div></div>
+      <div class="stat-card" onclick="goTo('publicites')"><div class="stat-icon">📣</div><div class="stat-val sv-pink">2</div><div class="stat-label">Pubs actives</div><div class="stat-chg">ROI 3.8x</div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-val sv-green">4</div><div class="stat-label">Ventes aujourd'hui</div><div class="stat-chg">↑ +2 vs hier</div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-val sv-gold">240k</div><div class="stat-label">CA ce mois (FCFA)</div><div class="stat-chg">↑ +18%</div></div>
+    </div>
+
+    <div class="sec-title">🔴 Prospects chauds <span class="sec-link" onclick="goTo('crm')">Voir tous →</span></div>
+    <div class="prospect-card" onclick="goTo('conversations')">
+      <div class="pav" style="background:var(--red-dim)">👩</div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">"Je veux commander 3 robes taille M"</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div style="font-size:10px;color:var(--text3)">5 min</div><div class="sbadge sb-hot">🔴 Chaud</div></div>
+    </div>
+    <div class="prospect-card" onclick="goTo('conversations')">
+      <div class="pav" style="background:var(--gold-dim)">👨</div>
+      <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Paul Mballa</div><div style="font-size:11px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">"Combien pour 10 unités ?"</div></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div style="font-size:10px;color:var(--text3)">23 min</div><div class="sbadge sb-hot">🔴 Chaud</div></div>
+    </div>
+
+    <div class="sec-title">📱 Plateformes connectées</div>
+    <div class="platform-item"><div style="font-size:20px;width:32px;text-align:center">📘</div><div style="font-size:13px;font-weight:600;flex:1">Facebook</div><div style="font-size:11px;color:var(--text2);margin-right:8px">24 msgs</div><div style="height:4px;background:var(--border2);border-radius:4px;width:70px;overflow:hidden"><div style="height:100%;width:80%;background:var(--blue);border-radius:4px"></div></div></div>
+    <div class="platform-item"><div style="font-size:20px;width:32px;text-align:center">💬</div><div style="font-size:13px;font-weight:600;flex:1">WhatsApp</div><div style="font-size:11px;color:var(--text2);margin-right:8px">18 msgs</div><div style="height:4px;background:var(--border2);border-radius:4px;width:70px;overflow:hidden"><div style="height:100%;width:60%;background:var(--green);border-radius:4px"></div></div></div>
+    <div class="platform-item"><div style="font-size:20px;width:32px;text-align:center">📸</div><div style="font-size:13px;font-weight:600;flex:1">Instagram</div><div style="font-size:11px;color:var(--text2);margin-right:8px">5 msgs</div><div style="height:4px;background:var(--border2);border-radius:4px;width:70px;overflow:hidden"><div style="height:100%;width:20%;background:var(--pink);border-radius:4px"></div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 2 — CONVERSATIONS / CHATBOT
+════════════════════════════════════ -->
+<div class="screen" id="screen-conversations">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><div style="font-size:11px;color:var(--text3)">🤖 Chatbot actif</div></div>
+  </div>
+  <div class="inner-tabs">
+    <div class="itab active" onclick="switchInner('chat-conv',this)">💬 Conversation</div>
+    <div class="itab" onclick="switchInner('chat-all',this)">📋 Toutes (47)</div>
+    <div class="itab" onclick="switchInner('chat-config',this)">⚙️ Config IA</div>
+    <div class="itab" onclick="switchInner('chat-stats',this)">📈 Stats</div>
+  </div>
+
+  <!-- CONVERSATION -->
+  <div class="ipage active" id="chat-conv" style="padding:0;display:flex;flex-direction:column;flex:1">
+    <div class="conv-header">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--red-dim);display:flex;align-items:center;justify-content:center;font-size:18px;position:relative;flex-shrink:0">👩<div style="position:absolute;bottom:-1px;right:-1px;width:14px;height:14px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:8px">📘</div></div>
+      <div style="flex:1"><div style="font-size:14px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--green)">● En ligne • Facebook</div></div>
+      <div class="sbadge sb-hot">🔴 Chaud</div>
+    </div>
+    <div class="chat-area" id="chatArea">
+      <div style="font-size:10px;color:var(--text3);text-align:center;margin:4px 0">Aujourd'hui, 14h32</div>
+      <div class="bubble-wrap"><div class="bav" style="background:var(--red-dim)">👩</div><div class="bubble bin">Bonjour ! Vous avez des robes taille M ?</div></div>
+      <div class="bubble-wrap"><div class="bav" style="background:var(--green-dim)">🤖</div><div class="bubble bai"><div class="ai-label">🤖 GrowthAI Africa a répondu</div>Bonjour Marie ! 😊 Oui, nous avons des robes taille M. Quel style — soirée, casual ou bureau ?</div></div>
+      <div class="bubble-wrap"><div class="bav" style="background:var(--red-dim)">👩</div><div class="bubble bin">Pour une soirée samedi. J'en veux 3 !</div></div>
+      <div class="bubble-wrap"><div class="bav" style="background:var(--green-dim)">🤖</div><div class="bubble bai"><div class="ai-label">🤖 GrowthAI Africa a répondu</div>Parfait ! 🎉 Pour 3 robes soirée, livraison gratuite à Yaoundé. Paiement MTN ou Orange Money. Notre commerciale vous contacte dans 5 min ! 😊</div></div>
+      <div style="font-size:10px;color:var(--text3);text-align:center;margin:4px 0">🔴 Notification envoyée au commercial</div>
+      <div class="bubble-wrap"><div class="bav" style="background:var(--red-dim)">👩</div><div class="bubble bin">D'accord j'attends 😊</div></div>
+      <div id="typingWrap" style="display:none"><div class="bubble-wrap"><div class="bav" style="background:var(--green-dim)">🤖</div><div style="display:flex;align-items:center;gap:4px;padding:10px 14px;background:var(--surface2);border-radius:4px 16px 16px 16px"><div style="width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing 1.2s ease-in-out infinite"></div><div style="width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing 1.2s ease-in-out 0.2s infinite"></div><div style="width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing 1.2s ease-in-out 0.4s infinite"></div></div></div></div>
+    </div>
+    <div class="chat-input-wrap">
+      <div class="ai-toggle-row">
+        <div style="font-size:16px">🤖</div>
+        <div style="flex:1"><div style="font-size:12px;font-weight:600">Mode IA automatique</div><div style="font-size:10px;color:var(--text3)">L'IA répond à la place du vendeur</div></div>
+        <div class="toggle" onclick="this.classList.toggle('off')"></div>
+      </div>
+      <div class="input-row">
+        <textarea class="chat-input" id="chatInput" placeholder="Écrire un message..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"></textarea>
+        <button class="send-btn" onclick="sendMsg()">→</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOUTES -->
+  <div class="ipage" id="chat-all" style="padding:14px 16px">
+    <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🔴 Prospects chauds</div>
+    <div class="prospect-card" onclick="switchInner('chat-conv',document.querySelector('.itab'))"><div class="pav" style="background:var(--red-dim)">👩</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--text2)">D'accord j'attends 😊</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="font-size:10px;color:var(--text3)">2 min</div><div class="sbadge sb-hot">🔴</div></div></div>
+    <div class="prospect-card"><div class="pav" style="background:var(--gold-dim)">👨</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Paul Mballa</div><div style="font-size:11px;color:var(--text2)">Combien pour 10 unités ?</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="font-size:10px;color:var(--text3)">15 min</div><div class="sbadge sb-hot">🔴</div></div></div>
+    <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px">✅ Ventes conclues</div>
+    <div class="prospect-card"><div class="pav" style="background:var(--green-dim)">👩</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Béatrice Fotso</div><div style="font-size:11px;color:var(--text2)">✅ Commande — 45 000 FCFA</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="font-size:10px;color:var(--text3)">2h</div><div class="sbadge sb-sold">✅</div></div></div>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="ipage" id="chat-config" style="padding:14px 16px">
+    <div class="settings-card">
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🤖</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Réponses automatiques</div><div style="font-size:11px;color:var(--text2)">L'IA répond à tous les messages</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🌙</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Mode nuit</div><div style="font-size:11px;color:var(--text2)">Réponses auto de 20h à 7h</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🛒</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Conclure les ventes</div><div style="font-size:11px;color:var(--text2)">L'IA finalise les commandes simples</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🔔</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Alertes prospects chauds</div><div style="font-size:11px;color:var(--text2)">Notification WhatsApp immédiate</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🔄</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Relances automatiques</div><div style="font-size:11px;color:var(--text2)">Après 6h et 24h sans réponse</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+    </div>
+  </div>
+
+  <!-- STATS CHAT -->
+  <div class="ipage" id="chat-stats" style="padding:14px 16px">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-icon">🤖</div><div class="stat-val sv-green">43</div><div class="stat-label">Messages IA aujourd'hui</div></div>
+      <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-val sv-blue">89%</div><div class="stat-label">Taux réponse auto</div></div>
+      <div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-val sv-gold">4</div><div class="stat-label">Ventes conclues IA</div></div>
+      <div class="stat-card"><div class="stat-icon">💰</div><div class="stat-val sv-green">73k</div><div class="stat-label">CA chatbot (FCFA)</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 3 — PUBLICATIONS
+════════════════════════════════════ -->
+<div class="screen" id="screen-publications">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><button style="background:var(--green);color:#000;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">✨ Créer</button></div>
+  </div>
+  <div class="inner-tabs">
+    <div class="itab active" onclick="switchInner('pub-creer',this)">✨ Créer IA</div>
+    <div class="itab" onclick="switchInner('pub-plan',this)">📅 Planifiées (5)</div>
+    <div class="itab" onclick="switchInner('pub-publiees',this)">✅ Publiées</div>
+    <div class="itab" onclick="switchInner('pub-stats',this)">📈 Stats</div>
+  </div>
+  <div class="ipage active" id="pub-creer" style="padding:14px 16px">
+    <div style="background:linear-gradient(135deg,rgba(45,206,106,0.08),rgba(45,206,106,0.03));border:1px solid rgba(45,206,106,0.2);border-radius:16px;padding:16px;margin-bottom:16px">
+      <div style="font-size:13px;font-weight:800;color:var(--green);margin-bottom:12px">🤖 Générateur IA</div>
+      <input style="width:100%;background:var(--surface);border:1px solid var(--border2);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;margin-bottom:10px" placeholder="Décrivez votre publication...">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+        <div style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--green-dim);border:1px solid rgba(45,206,106,0.3);color:var(--green);cursor:pointer">📸 Post produit</div>
+        <div style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border2);color:var(--text2);cursor:pointer">🎉 Promotion</div>
+        <div style="padding:5px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border2);color:var(--text2);cursor:pointer">🎬 Vidéo</div>
+      </div>
+      <button class="create-btn-full" style="margin-bottom:0" onclick="this.textContent='🤖 Génération...';setTimeout(()=>{this.textContent='✨ Générer avec l\'IA';document.getElementById('genResult').style.display='block'},1500)">✨ Générer avec l'IA</button>
+    </div>
+    <div id="genResult" style="display:none">
+      <div class="pub-card">
+        <div class="pub-img" style="background:linear-gradient(135deg,#1a2c1e,#0d1a10)">👗<div class="pub-status ps-sched">🤖 Généré</div></div>
+        <div class="pub-body">
+          <div style="font-size:13px;font-weight:700;margin-bottom:6px">Nouvelle collection robes d'été</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px">✨ NOUVELLE COLLECTION ! Robes taille S à XL. Livraison Yaoundé sous 24h. 15 000 – 45 000 FCFA 🛍️</div>
+          <div style="display:flex;gap:8px">
+            <button style="flex:1;padding:9px;border-radius:10px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--green);color:#000;font-family:'Plus Jakarta Sans',sans-serif">📤 Publier</button>
+            <button style="flex:1;padding:9px;border-radius:10px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--blue-dim);color:var(--blue);font-family:'Plus Jakarta Sans',sans-serif">📅 Planifier</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ipage" id="pub-plan" style="padding:14px 16px">
+    <div class="pub-card"><div class="pub-img" style="background:linear-gradient(135deg,#1a2c1e,#0d1a10)">👗<div class="pub-status ps-sched">Aujourd'hui 18h</div></div><div class="pub-body"><div style="font-size:13px;font-weight:700">Nouvelle collection robes d'été</div><div style="font-size:11px;color:var(--text2);margin-top:4px">📘📸 Facebook + Instagram</div></div></div>
+    <div class="pub-card"><div class="pub-img" style="background:linear-gradient(135deg,#1a1a0a,#2a2000)">🏷️<div class="pub-status ps-sched">Demain 9h</div></div><div class="pub-body"><div style="font-size:13px;font-weight:700">Promo weekend -15%</div><div style="font-size:11px;color:var(--text2);margin-top:4px">💬 WhatsApp Status</div></div></div>
+  </div>
+  <div class="ipage" id="pub-publiees" style="padding:14px 16px">
+    <div class="pub-card"><div class="pub-img" style="background:linear-gradient(135deg,#1a0a1a,#1a1020)">💄<div class="pub-status ps-pub">✓ Publié hier</div></div><div class="pub-body"><div style="font-size:13px;font-weight:700">Collection cosmétiques naturels</div><div style="display:flex;gap:12px;margin-top:6px"><div style="font-size:10px;color:var(--text2)">👁️ 1.2k</div><div style="font-size:10px;color:var(--text2)">❤️ 87</div><div style="font-size:10px;color:var(--green);font-weight:700">🛒 5 ventes</div></div></div></div>
+  </div>
+  <div class="ipage" id="pub-stats" style="padding:14px 16px">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val sv-blue">6.5k</div><div class="stat-label">Vues cette semaine</div><div class="stat-chg">↑ +28%</div></div>
+      <div class="stat-card"><div class="stat-val sv-green">28</div><div class="stat-label">Ventes via posts</div><div class="stat-chg">↑ +8</div></div>
+      <div class="stat-card"><div class="stat-val sv-gold">420k</div><div class="stat-label">CA généré (FCFA)</div><div class="stat-chg">↑ +35%</div></div>
+      <div class="stat-card"><div class="stat-val sv-pink">386</div><div class="stat-label">Interactions</div><div class="stat-chg">↑ +15%</div></div>
+    </div>
+    <div class="tip"><strong>Meilleur créneau :</strong> 18h-20h génère 2.4x plus d'engagement. Planifiez vos posts à 18h30.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 4 — PUBLICITÉS
+════════════════════════════════════ -->
+<div class="screen" id="screen-publicites">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><button class="create-btn-full create-btn-meta" style="width:auto;padding:8px 14px;font-size:12px;margin-bottom:0;border-radius:10px">+ Créer pub</button></div>
+  </div>
+  <div class="scroll-content">
+    <div class="roi-hero" style="margin-top:4px">
+      <div style="font-size:12px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:14px">💰 Performance ce mois</div>
+      <div class="roi-grid">
+        <div class="roi-item"><div class="roi-val" style="color:var(--green)">3.8x</div><div style="font-size:10px;color:var(--text2);margin-top:3px">ROI moyen</div></div>
+        <div class="roi-item"><div class="roi-val" style="color:var(--gold)">380k</div><div style="font-size:10px;color:var(--text2);margin-top:3px">CA (FCFA)</div></div>
+        <div class="roi-item"><div class="roi-val" style="color:var(--blue)">2.1k</div><div style="font-size:10px;color:var(--text2);margin-top:3px">Touchées</div></div>
+      </div>
+    </div>
+
+    <div class="sec-title">🟢 Campagnes actives</div>
+    <div class="ad-card">
+      <div class="ad-header"><div style="width:38px;height:38px;border-radius:10px;background:rgba(24,119,242,0.15);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">📘📸</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Collection Robes — Yaoundé</div><div style="font-size:11px;color:var(--text2);margin-top:2px">🎯 Femmes 18-35 ans</div></div><div class="ad-status as-active">● Actif</div></div>
+      <div class="ad-stats">
+        <div class="ad-stat"><div class="ad-stat-val" style="color:var(--blue)">1.2k</div><div class="ad-stat-label">Touchées</div></div>
+        <div class="ad-stat"><div class="ad-stat-val" style="color:var(--green)">84</div><div class="ad-stat-label">Clics</div></div>
+        <div class="ad-stat"><div class="ad-stat-val" style="color:var(--gold)">12</div><div class="ad-stat-label">Ventes</div></div>
+        <div class="ad-stat"><div class="ad-stat-val" style="color:var(--green)">4.1x</div><div class="ad-stat-label">ROI</div></div>
+      </div>
+      <div class="ad-footer">
+        <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px"><span>Budget utilisé</span><span style="font-weight:700;color:var(--text)">6 500 / 10 000 FCFA</span></div>
+        <div class="budget-bar"><div class="budget-fill" style="width:65%"></div></div>
+        <div class="ad-actions"><button class="ad-btn ab-pause">⏸ Pause</button><button class="ad-btn ab-edit">✏️ Modifier</button></div>
+      </div>
+    </div>
+
+    <div class="tip"><strong>🏆 Retargeting :</strong> ROI 5.2x sur les visiteurs ayant déjà interagi. Activez-le pour maximiser vos ventes.</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 5 — CRM
+════════════════════════════════════ -->
+<div class="screen" id="screen-crm">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><div style="font-size:11px;color:var(--text3)">👥 CRM — 18 clients</div></div>
+  </div>
+  <div class="inner-tabs">
+    <div class="itab active" onclick="switchInner('crm-pipeline',this)">🔄 Pipeline</div>
+    <div class="itab" onclick="switchInner('crm-clients',this)">✅ Clients</div>
+    <div class="itab" onclick="switchInner('crm-ventes',this)">💰 Ventes</div>
+  </div>
+  <div class="ipage active" id="crm-pipeline" style="padding:14px 16px">
+    <div class="funnel-grid">
+      <div class="funnel-item active-f"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--red)">3</div><div style="font-size:10px;color:var(--text2);margin-top:3px">🔴 Chauds</div></div>
+      <div class="funnel-item"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--gold)">8</div><div style="font-size:10px;color:var(--text2);margin-top:3px">🟡 Moyens</div></div>
+      <div class="funnel-item"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--blue)">7</div><div style="font-size:10px;color:var(--text2);margin-top:3px">🔵 Faibles</div></div>
+      <div class="funnel-item"><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--green)">18</div><div style="font-size:10px;color:var(--text2);margin-top:3px">✅ Clients</div></div>
+    </div>
+    <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">🔴 Agir maintenant</div>
+    <div class="client-card"><div class="cc-header"><div class="cc-av" style="background:var(--red-dim)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--text2)">📘 Facebook · Robes · 5 min</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div class="sbadge sb-hot">🔴 Chaud</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green)">75 000</div></div></div></div>
+    <div class="client-card"><div class="cc-header"><div class="cc-av" style="background:var(--gold-dim)">👨</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Paul Mballa</div><div style="font-size:11px;color:var(--text2)">💬 WhatsApp · 10 unités · 23 min</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div class="sbadge sb-hot">🔴 Chaud</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green)">150 000</div></div></div></div>
+  </div>
+  <div class="ipage" id="crm-clients" style="padding:14px 16px">
+    <div class="client-card"><div class="cc-header"><div class="cc-av" style="background:var(--green-dim)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Béatrice Fotso</div><div style="font-size:11px;color:var(--text2)">3 commandes · Dernière : hier</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div class="sbadge sb-sold">⭐ Fidèle</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green)">135 000</div></div></div></div>
+    <div class="client-card"><div class="cc-header"><div class="cc-av" style="background:var(--blue-dim)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Sandra Ekotto</div><div style="font-size:11px;color:var(--text2)">5 commandes · Cliente fidèle</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:5px"><div class="sbadge sb-sold">⭐ Fidèle</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green)">280 000</div></div></div></div>
+  </div>
+  <div class="ipage" id="crm-ventes" style="padding:14px 16px">
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-val sv-green">240k</div><div class="stat-label">CA ce mois (FCFA)</div><div class="stat-chg">↑ +18%</div></div>
+      <div class="stat-card"><div class="stat-val sv-gold">28</div><div class="stat-label">Ventes ce mois</div><div class="stat-chg">↑ +6</div></div>
+    </div>
+    <div class="client-card"><div class="cc-header"><div class="cc-av" style="background:var(--green-dim)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Béatrice Fotso</div><div style="font-size:11px;color:var(--text2)">✅ Robes x2 + Sac · MTN Money · 2h</div></div><div style="display:flex;flex-direction:column;align-items:flex-end"><div class="sbadge sb-sold">✅ Payé</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--green);margin-top:4px">45 000</div></div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 6 — NOTIFICATIONS
+════════════════════════════════════ -->
+<div class="screen" id="screen-notifications">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><div style="font-size:12px;font-weight:700;color:var(--green);cursor:pointer">Tout lire</div></div>
+  </div>
+  <div class="scroll-content">
+    <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Aujourd'hui</div>
+    <div class="notif-item unread"><div class="notif-icon" style="background:var(--red-dim)">🔴</div><div class="notif-body"><div class="notif-title">Prospect chaud détecté !</div><div class="notif-sub">Marie Nguema veut commander 3 robes taille M — Répondez maintenant</div><div class="notif-time">Il y a 5 min</div></div><div class="unread-dot"></div></div>
+    <div class="notif-item unread"><div class="notif-icon" style="background:var(--green-dim)">✅</div><div class="notif-body"><div class="notif-title">Vente conclue !</div><div class="notif-sub">Béatrice Fotso a payé 45 000 FCFA via MTN Money</div><div class="notif-time">Il y a 2h</div></div><div class="unread-dot"></div></div>
+    <div class="notif-item unread"><div class="notif-icon" style="background:var(--purple-dim)">📝</div><div class="notif-body"><div class="notif-title">Publication planifiée</div><div class="notif-sub">Votre post "Collection robes d'été" sera publié ce soir à 18h00</div><div class="notif-time">Il y a 3h</div></div><div class="unread-dot"></div></div>
+    <div class="notif-item"><div class="notif-icon" style="background:var(--blue-dim)">📣</div><div class="notif-body"><div class="notif-title">Campagne performante</div><div class="notif-sub">Votre pub "Robes Yaoundé" atteint un ROI de 4.1x — Budget à 65%</div><div class="notif-time">Il y a 4h</div></div></div>
+    <div style="font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin:16px 0 10px">Hier</div>
+    <div class="notif-item"><div class="notif-icon" style="background:var(--gold-dim)">🟡</div><div class="notif-body"><div class="notif-title">Relance automatique envoyée</div><div class="notif-sub">Carine Ndongo a été relancée automatiquement après 24h</div><div class="notif-time">Hier 20h</div></div></div>
+    <div class="notif-item"><div class="notif-icon" style="background:var(--green-dim)">📊</div><div class="notif-body"><div class="notif-title">Rapport hebdomadaire prêt</div><div class="notif-sub">Cette semaine : 47 messages, 3 ventes, ROI 3.8x</div><div class="notif-time">Hier 7h</div></div></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════
+     SCREEN 7 — PROFIL & PARAMÈTRES
+════════════════════════════════════ -->
+<div class="screen" id="screen-profil">
+  <div class="page-header">
+    <div class="ph-row"><div class="logo">Growth<span>AI Africa</span></div><div style="font-size:14px;cursor:pointer;color:var(--text2)">✏️</div></div>
+  </div>
+  <div class="scroll-content">
+    <div class="profile-hero">
+      <div class="profile-av">🏪</div>
+      <div class="profile-name">Boutique Ambera</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px">Mode & Vêtements • Yaoundé</div>
+      <div class="profile-plan">⭐ Plan Pro — 40 000 FCFA/mois</div>
+      <div class="profile-stats">
+        <div class="ps-item"><div class="ps-val">240k</div><div class="ps-label">CA ce mois</div></div>
+        <div class="ps-item"><div class="ps-val">18</div><div class="ps-label">Clients</div></div>
+        <div class="ps-item"><div class="ps-val">3.8x</div><div class="ps-label">ROI</div></div>
+      </div>
+    </div>
+
+    <div class="sec-title">⚙️ Paramètres</div>
+    <div class="settings-card">
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🤖</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Réponses automatiques</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🔔</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Notifications WhatsApp</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🌙</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Mode nuit (20h-7h)</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">🔄</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Relances automatiques</div></div><div class="si-toggle on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+    </div>
+
+    <div class="sec-title">📱 Plateformes connectées</div>
+    <div class="settings-card">
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">📘</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Facebook</div><div style="font-size:11px;color:var(--green)">● Connecté</div></div><div style="font-size:13px;color:var(--text3)">→</div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">💬</div><div style="flex:1"><div style="font-size:13px;font-weight:600">WhatsApp Business</div><div style="font-size:11px;color:var(--green)">● Connecté</div></div><div style="font-size:13px;color:var(--text3)">→</div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">📸</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Instagram</div><div style="font-size:11px;color:var(--gold)">⏳ En attente</div></div><div style="font-size:13px;color:var(--text3)">→</div></div>
+    </div>
+
+    <div class="sec-title">💳 Abonnement</div>
+    <div class="settings-card">
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">⭐</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Plan Pro actuel</div><div style="font-size:11px;color:var(--text2)">40 000 FCFA/mois • Renouvellement le 26/04</div></div><div style="font-size:11px;font-weight:700;color:var(--blue);cursor:pointer">Changer →</div></div>
+      <div class="settings-item"><div style="font-size:20px;width:30px;text-align:center">📋</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Historique des paiements</div></div><div style="font-size:13px;color:var(--text3)">→</div></div>
+    </div>
+
+    <div class="settings-card" style="margin-top:8px">
+      <div class="settings-item" style="color:var(--red)"><div style="font-size:20px;width:30px;text-align:center">🚪</div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--red)">Se déconnecter</div></div></div>
+    </div>
+    <div style="height:10px"></div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="bni active" id="bni-dashboard" onclick="goTo('dashboard')"><div class="bni-icon">🏠</div><div class="bni-label">Accueil</div></div>
+  <div class="bni" id="bni-conversations" onclick="goTo('conversations')"><div class="bni-icon">💬</div><div class="bni-label">Messages</div><div class="bni-badge">12</div></div>
+  <div class="bni" id="bni-publications" onclick="goTo('publications')"><div class="bni-icon">📝</div><div class="bni-label">Posts</div></div>
+  <div class="bni" id="bni-publicites" onclick="goTo('publicites')"><div class="bni-icon">📣</div><div class="bni-label">Pubs</div></div>
+  <div class="bni" id="bni-crm" onclick="goTo('crm')"><div class="bni-icon">👥</div><div class="bni-label">CRM</div><div class="bni-badge">3</div></div>
+  <div class="bni" id="bni-profil" onclick="goTo('profil')"><div class="bni-icon">⚙️</div><div class="bni-label">Profil</div></div>
+</div>
+
+<style>
+@keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+</style>
+
+<script>
+const screens = ['dashboard','conversations','publications','publicites','crm','notifications','profil'];
+
+function goTo(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.bni').forEach(b => b.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+  const bni = document.getElementById('bni-' + name);
+  if (bni) bni.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function switchInner(id, el) {
+  const screen = document.getElementById('screen-' + id.split('-')[0]);
+  const container = el ? el.closest('.screen') || document.querySelector('.screen.active') : document.querySelector('.screen.active');
+  container.querySelectorAll('.itab').forEach(t => t.classList.remove('active'));
+  container.querySelectorAll('.ipage').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  const chatArea = document.getElementById('chatArea');
+  const typingWrap = document.getElementById('typingWrap');
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap out';
+  wrap.innerHTML = `<div class="bubble bout">${text}</div>`;
+  chatArea.insertBefore(wrap, typingWrap);
+  input.value = '';
+  typingWrap.style.display = 'flex';
+  chatArea.scrollTop = chatArea.scrollHeight;
+  setTimeout(() => {
+    typingWrap.style.display = 'none';
+    const aiWrap = document.createElement('div');
+    aiWrap.className = 'bubble-wrap';
+    aiWrap.innerHTML = `<div class="bav" style="background:var(--green-dim)">🤖</div><div class="bubble bai"><div class="ai-label">🤖 GrowthAI Africa a répondu</div>Merci pour votre message ! Je traite votre demande 😊</div>`;
+    chatArea.insertBefore(aiWrap, typingWrap);
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }, 1500);
+}
+
+document.getElementById('chatArea').scrollTop = 9999;
+</script>
+</body>
+</html>

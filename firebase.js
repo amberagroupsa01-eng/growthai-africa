@@ -1,8 +1,7 @@
-// /core/firebase.js — GrowthAI Africa
+// /core/firebase.js — GrowthAI Africa avec secteurs
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
-import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, orderBy, onSnapshot, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, addDoc, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
 
-// ✅ Configuration Firebase — GrowthAI Africa
 const firebaseConfig = {
   apiKey: "AIzaSyCML1LKVPNHjHB9LyrYgpPJFdCl5epROBI",
   authDomain: "growthai-africa.firebaseapp.com",
@@ -15,12 +14,42 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// ─── CONVERSATIONS ───────────────────────────────────────
+// ─── CLIENTS PME ──────────────────────────────────────────
+export async function saveClient(clientId, data) {
+  await setDoc(doc(db, "clients", clientId), {
+    id: clientId,
+    name: data.name || "",
+    business: data.business || "",
+    sector: data.sector || "default",
+    sector_label: data.sector_label || "",
+    phone: data.phone || "",
+    city: data.city || "Yaoundé",
+    plan: data.plan || "Basic",
+    language: data.language || "fr",
+    status: data.status || "trial",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }, { merge: true });
+}
+
+export async function getClient(clientId) {
+  const snap = await getDoc(doc(db, "clients", clientId));
+  return snap.exists() ? snap.data() : null;
+}
+
+export async function updateClientSector(clientId, sector) {
+  await updateDoc(doc(db, "clients", clientId), {
+    sector, updated_at: new Date().toISOString()
+  });
+}
+
+// ─── CONVERSATIONS ────────────────────────────────────────
 export async function saveConversation(userId, state) {
   await setDoc(doc(db, "conversations", userId), {
     user_id: userId,
     name: state.name || "",
     language: state.language || "fr",
+    sector: state.sector || "default",
     stage: state.stage || "greeting",
     last_intent: state.last_intent || "",
     score: state.score || 0,
@@ -32,39 +61,17 @@ export async function saveConversation(userId, state) {
 }
 
 export async function getConversation(userId) {
-  const docRef = doc(db, "conversations", userId);
-  const docSnap = await getDoc(docRef);
-  return docSnap.exists() ? docSnap.data() : null;
+  const snap = await getDoc(doc(db, "conversations", userId));
+  return snap.exists() ? snap.data() : null;
 }
 
-// ─── MESSAGES ────────────────────────────────────────────
-export async function saveMessage(conversationId, text, sender = "bot") {
-  await addDoc(collection(db, "messages"), {
-    conversation_id: conversationId,
-    text,
-    sender,
-    created_at: new Date().toISOString()
-  });
-}
-
-export function listenMessages(conversationId, callback) {
-  const q = query(
-    collection(db, "messages"),
-    where("conversation_id", "==", conversationId),
-    orderBy("created_at", "asc")
-  );
-  return onSnapshot(q, (snapshot) => {
-    const msgs = snapshot.docs.map(d => d.data());
-    callback(msgs);
-  });
-}
-
-// ─── LEADS ───────────────────────────────────────────────
+// ─── LEADS ────────────────────────────────────────────────
 export async function saveLead(userId, data) {
   await setDoc(doc(db, "leads", userId), {
     user_id: userId,
     status: data.lead_status || "COLD",
     score: data.score || 0,
+    sector: data.sector || "default",
     language: data.language || "fr",
     stage: data.stage || "greeting",
     platform: data.platform || "facebook",
@@ -76,42 +83,38 @@ export async function saveLead(userId, data) {
 
 export async function updateLead(leadId, updates) {
   await updateDoc(doc(db, "leads", leadId), {
-    ...updates,
-    updated_at: new Date().toISOString()
+    ...updates, updated_at: new Date().toISOString()
   });
 }
 
-export async function getHotLeads() {
-  const q = query(collection(db, "leads"), where("status", "==", "HOT"));
-  const snapshot = await getDocs(q);
-  return snapshot.docs.map(d => d.data());
+export async function getLeadsBySector(sector) {
+  const q = query(collection(db, "leads"), where("sector", "==", sector));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => d.data());
 }
 
-// ─── INTERACTIONS ─────────────────────────────────────────
-export async function saveInteraction(leadId, messageSent, responseReceived) {
-  await addDoc(collection(db, "interactions"), {
-    lead_id: leadId,
-    message_sent: messageSent,
-    response_received: responseReceived,
-    status: "replied",
+// ─── MESSAGES ─────────────────────────────────────────────
+export async function saveMessage(conversationId, text, sender = "bot") {
+  await addDoc(collection(db, "messages"), {
+    conversation_id: conversationId,
+    text, sender,
     created_at: new Date().toISOString()
   });
 }
 
-// ─── VENTES ──────────────────────────────────────────────
-export async function saveSale(userId, amount, product) {
+// ─── VENTES ───────────────────────────────────────────────
+export async function saveSale(userId, amount, product, sector = "default") {
   await addDoc(collection(db, "sales"), {
-    user_id: userId,
-    amount,
-    product,
+    user_id: userId, amount, product, sector,
     created_at: new Date().toISOString()
   });
   await updateLead(userId, { status: "converted" });
 }
 
-export async function getTotalSales() {
-  const snapshot = await getDocs(collection(db, "sales"));
-  const sales = snapshot.docs.map(d => d.data());
+export async function getSalesBySector(sector) {
+  const q = query(collection(db, "sales"), where("sector", "==", sector));
+  const snap = await getDocs(q);
+  const sales = snap.docs.map(d => d.data());
   const total = sales.reduce((sum, s) => sum + (s.amount || 0), 0);
   return { total, count: sales.length, sales };
 }

@@ -4,402 +4,670 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GrowthAI Africa — Vendez plus automatiquement</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#fff;--surface:#f8fafb;--surface2:#f0f4f8;--border:#e2e8f0;--border2:#cbd5e1;--green:#16a34a;--green2:#15803d;--green-dim:rgba(22,163,74,0.1);--gold:#d97706;--gold-dim:rgba(217,119,6,0.1);--red:#dc2626;--red-dim:rgba(220,38,38,0.1);--blue:#2563eb;--text:#0f172a;--text2:#475569;--text3:#94a3b8;--shadow:0 1px 3px rgba(0,0,0,0.1);--shadow-md:0 4px 6px rgba(0,0,0,0.07);--shadow-lg:0 10px 15px rgba(0,0,0,0.1)}
-  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;overflow-x:hidden}
-  h1,h2{font-family:'Syne',sans-serif}
-
-  .nav{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:100;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);box-shadow:var(--shadow)}
-  .nav-logo{display:flex;align-items:center;gap:8px}
-  .nav-logo img{height:30px;object-fit:contain}
-  .nav-logo-text{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--text)}
-  .nav-logo-text span{color:var(--green)}
-  .nav-cta{background:var(--green);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
-
-  .hero{padding:90px 24px 50px;background:linear-gradient(180deg,#f0fdf4 0%,#fff 100%)}
-  .hero-tag{display:inline-flex;align-items:center;gap:6px;background:var(--green-dim);border:1px solid rgba(22,163,74,0.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--green);margin-bottom:20px}
-  .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;animation:blink 1.5s ease-in-out infinite}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
-  .hero-title{font-size:34px;font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:14px}
-  .hero-title span{color:var(--green)}
-  .hero-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:24px}
-  .btn-green{background:var(--green);color:white;border:none;border-radius:12px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:100%;margin-bottom:10px;transition:background 0.2s}
-  .btn-green:hover{background:var(--green2)}
-  .btn-outline{background:white;color:var(--green);border:2px solid var(--green);border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:100%;transition:all 0.2s}
-  .hero-note{font-size:11px;color:var(--text3);text-align:center;margin-top:10px}
-  .hero-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:24px}
-  .hs{background:white;border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;box-shadow:var(--shadow)}
-  .hs-val{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--green)}
-  .hs-label{font-size:10px;color:var(--text3);margin-top:3px}
-
-  .demo-section{padding:40px 24px;background:#f0fdf4}
-  .demo-title{font-size:13px;font-weight:800;color:var(--green);text-align:center;margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
-  .demo-phone{background:white;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg);max-width:320px;margin:0 auto}
-  .demo-hdr{background:#075e54;padding:10px 14px;display:flex;align-items:center;gap:10px}
-  .demo-av{width:34px;height:34px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-  .demo-chat{background:#e5ddd5;padding:12px;display:flex;flex-direction:column;gap:6px}
-  .dm{padding:7px 10px;border-radius:8px;font-size:12px;line-height:1.5;max-width:82%}
-  .dm-in{background:white;align-self:flex-start;border-radius:0 8px 8px 8px;color:#303030}
-  .dm-out{background:#dcf8c6;align-self:flex-end;border-radius:8px 0 8px 8px;color:#303030}
-  .dm-lbl{font-size:9px;font-weight:700;color:#075e54;margin-bottom:2px}
-  .dm-time{font-size:9px;color:#999;text-align:right;margin-top:2px}
-  .dm-sale{background:#25d366;color:white;padding:8px 12px;border-radius:10px;font-size:11px;font-weight:800;text-align:center}
-  .demo-note{text-align:center;font-size:10px;color:#888;margin-top:8px}
-
-  .sim-section{padding:40px 24px}
-  .stag{display:inline-block;background:var(--green-dim);border:1px solid rgba(22,163,74,0.2);border-radius:20px;padding:4px 14px;font-size:11px;font-weight:700;color:var(--green);margin-bottom:14px}
-  .stitle{font-size:26px;font-weight:800;line-height:1.1;margin-bottom:10px}
-  .ssub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:20px}
-  .sim-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px}
-  .sim-label{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:10px}
-  .sim-btns{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
-  .sim-btn{background:white;border:2px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;font-weight:600;cursor:pointer;text-align:left;transition:all 0.2s;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:8px}
-  .sim-btn:hover{border-color:var(--green);background:var(--green-dim);color:var(--green)}
-  .sim-btn.active{border-color:var(--green);background:var(--green-dim);color:var(--green)}
-  .sim-result{display:none;background:white;border:1px solid var(--border);border-radius:12px;padding:14px}
-  .sim-result.show{display:block;animation:fadeIn 0.3s ease}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-  .sim-score-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
-  .sim-badge{font-size:10px;font-weight:800;padding:3px 10px;border-radius:20px}
-  .sb-hot{background:var(--red-dim);color:var(--red)}
-  .sb-warm{background:var(--gold-dim);color:var(--gold)}
-  .sb-cold{background:var(--surface2);color:var(--text3)}
-  .sim-reply-box{background:var(--green-dim);border-left:3px solid var(--green);border-radius:0 10px 10px 0;padding:10px 12px;font-size:13px;line-height:1.6;color:var(--text)}
-  .sim-notif{background:var(--red-dim);border:1px solid rgba(220,38,38,0.2);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--red);font-weight:700;margin-top:8px;display:flex;align-items:center;gap:6px}
-
-  .prob-section{padding:40px 24px;background:var(--surface)}
-  .prob-card{background:white;border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;gap:12px;margin-bottom:10px;box-shadow:var(--shadow)}
-  .prob-icon{font-size:26px;flex-shrink:0}
-  .prob-title{font-size:13px;font-weight:700;margin-bottom:3px}
-  .prob-desc{font-size:12px;color:var(--text2);line-height:1.5}
-  .prob-cost{font-size:11px;font-weight:700;color:var(--red);margin-top:4px}
-
-  .sol-section{padding:40px 24px}
-  .sol-step{display:flex;gap:14px;padding-bottom:20px;position:relative}
-  .sol-step::after{content:'';position:absolute;left:17px;top:40px;bottom:0;width:2px;background:var(--border)}
-  .sol-step:last-child::after{display:none}
-  .sol-num{width:34px;height:34px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:white;flex-shrink:0;z-index:1;box-shadow:var(--shadow-md)}
-  .sol-title{font-size:14px;font-weight:800;margin-bottom:3px;padding-top:5px}
-  .sol-desc{font-size:12px;color:var(--text2);line-height:1.6}
-
-  .results-section{padding:40px 24px;background:var(--surface)}
-  .results-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-  .result-card{background:white;border:1px solid var(--border);border-radius:14px;padding:16px;text-align:center;box-shadow:var(--shadow)}
-  .result-val{font-family:'Syne',sans-serif;font-size:28px;font-weight:800;color:var(--green)}
-  .result-label{font-size:11px;color:var(--text2);margin-top:5px;line-height:1.4}
-
-  .testi-section{padding:40px 24px}
-  .testi-card{background:white;border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
-  .testi-stars{color:var(--gold);font-size:14px;margin-bottom:8px}
-  .testi-text{font-size:13px;color:var(--text2);line-height:1.7;font-style:italic;margin-bottom:12px}
-  .testi-name{font-size:13px;font-weight:700}
-  .testi-result{font-size:11px;font-weight:700;color:var(--green);margin-top:2px}
-
-  .pricing-section{padding:40px 24px;background:var(--surface)}
-  .pc{background:white;border:2px solid var(--border);border-radius:18px;padding:20px;margin-bottom:10px;box-shadow:var(--shadow);position:relative}
-  .pc.featured{border-color:var(--green);background:linear-gradient(135deg,#f0fdf4,#fff)}
-  .pc-badge{position:absolute;top:14px;right:14px;background:var(--green);color:white;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
-  .pc-plan{font-size:12px;font-weight:800;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
-  .pc-price{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:var(--text);line-height:1;margin-bottom:4px}
-  .pc.featured .pc-price{color:var(--green)}
-  .pc-period{font-size:12px;color:var(--text3);margin-bottom:14px}
-  .pc-feat{font-size:12px;color:var(--text2);display:flex;gap:7px;margin-bottom:7px}
-  .pc-feat::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
-  .pc-btn{width:100%;padding:13px;border-radius:12px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:14px;transition:all 0.2s}
-  .pc-btn-g{background:var(--green);color:white}
-  .pc-btn-d{background:var(--surface);color:var(--text);border:1px solid var(--border)}
-
-  .faq-section{padding:40px 24px}
-  .faq-item{background:white;border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;margin-bottom:8px;box-shadow:var(--shadow)}
-  .faq-q{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-  .faq-question{font-size:13px;font-weight:700;flex:1}
-  .faq-arrow{font-size:12px;color:var(--text3);transition:transform 0.2s}
-  .faq-item.open .faq-arrow{transform:rotate(180deg)}
-  .faq-a{display:none;padding:0 16px 14px;font-size:12px;color:var(--text2);line-height:1.7;border-top:1px solid var(--border)}
-  .faq-a.open{display:block}
-  .faq-a strong{color:var(--green)}
-
-  .cta-section{padding:40px 24px 100px}
-  .fc-box{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:2px solid rgba(22,163,74,0.3);border-radius:24px;padding:32px 20px;text-align:center}
-  .fc-title{font-size:26px;font-weight:800;line-height:1.1;margin-bottom:10px}
-  .fc-title span{color:var(--green)}
-  .fc-sub{font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:22px}
-  .fc-wa{background:#25d366;color:white;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:100%;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
-  .fc-note{font-size:11px;color:var(--text3);margin-top:10px}
-
-  .sticky{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);border-top:1px solid var(--border);padding:12px 20px 16px;z-index:100;display:none;gap:12px;align-items:center;box-shadow:0 -4px 20px rgba(0,0,0,0.1)}
-  .sticky.show{display:flex}
-  .sticky-price{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--green)}
-  .sticky-label{font-size:10px;color:var(--text3)}
-  .sticky-btn{background:var(--green);color:white;border:none;border-radius:10px;padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap}
-
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-end;justify-content:center}
-  .modal-overlay.open{display:flex;animation:fadeIn 0.2s ease}
-  .modal{background:white;border-radius:24px 24px 0 0;padding:24px 20px 40px;width:100%;max-width:430px;animation:slideUp 0.3s cubic-bezier(0.16,1,0.3,1);max-height:90vh;overflow-y:auto}
-  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-  .modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px}
-  .modal-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:6px}
-  .modal-sub{font-size:13px;color:var(--text2);margin-bottom:20px}
-  .mfield{margin-bottom:14px}
-  .mlabel{font-size:12px;font-weight:700;color:var(--text2);margin-bottom:6px;display:block}
-  .minput{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:14px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color 0.2s}
-  .minput:focus{border-color:var(--green)}
-  .mbtn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--green);color:white;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
-
-  footer{background:var(--surface);border-top:1px solid var(--border);padding:24px;text-align:center}
-  .footer-logo{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px}
-  .footer-logo span{color:var(--green)}
+:root{--g:#16a34a;--g2:#15803d;--gd:rgba(22,163,74,.1);--o:#d97706;--od:rgba(217,119,6,.1);--r:#dc2626;--rd:rgba(220,38,38,.1);--b:#2563eb;--bd:rgba(37,99,235,.1);--bg:#f8fafb;--s:#fff;--s2:#f0f4f8;--br:#e2e8f0;--t:#0f172a;--t2:#475569;--t3:#94a3b8;--sh:0 1px 3px rgba(0,0,0,.08);--sh2:0 4px 8px rgba(0,0,0,.08)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--t);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+.pg{display:none;min-height:100vh;flex-direction:column}
+.pg.on{display:flex;animation:fi .25s ease}
+@keyframes fi{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:translateX(0)}}
+.bnav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--s);border-top:1px solid var(--br);display:flex;z-index:300;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.bni{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:7px 0 14px;position:relative}
+.bni-i{font-size:19px}.bni-l{font-size:9px;font-weight:600;color:var(--t3)}
+.bni.on .bni-l{color:var(--g)}
+.bni-b{position:absolute;top:3px;right:calc(50% - 17px);background:var(--r);color:#fff;font-size:8px;font-weight:800;width:13px;height:13px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid var(--bg)}
+.hdr{background:var(--s);border-bottom:1px solid var(--br);padding:13px 20px 11px;position:sticky;top:0;z-index:200;box-shadow:var(--sh)}
+.hrow{display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:8px}
+.logo img{height:28px;object-fit:contain}
+.ltxt{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--t)}
+.ltxt span{color:var(--g)}
+.hbtn{width:34px;height:34px;border-radius:50%;background:var(--s2);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative}
+.hdot{width:8px;height:8px;background:var(--r);border-radius:50%;position:absolute;top:4px;right:4px;border:2px solid var(--s)}
+.scr{flex:1;overflow-y:auto;padding:16px 16px 88px}
+.itabs{display:flex;background:var(--s);border-bottom:1px solid var(--br);position:sticky;top:64px;z-index:150;overflow-x:auto;scrollbar-width:none}
+.itabs::-webkit-scrollbar{display:none}
+.itab{flex-shrink:0;padding:10px 14px;font-size:11px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap}
+.itab.on{color:var(--g);border-bottom-color:var(--g)}
+.ipane{display:none;padding:14px 16px}.ipane.on{display:block}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.sc{background:var(--s);border:1px solid var(--br);border-radius:14px;padding:14px;box-shadow:var(--sh);cursor:pointer;transition:border-color .15s}
+.sc:hover{border-color:var(--g)}
+.sv{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;line-height:1}
+.sl{font-size:11px;color:var(--t2);margin-top:3px}
+.scg{font-size:10px;font-weight:700;color:var(--g);margin-top:5px}
+.cg{color:var(--g)}.cr{color:var(--r)}.cb{color:var(--b)}.co{color:var(--o)}
+.alrt{background:#f0fdf4;border:1px solid rgba(22,163,74,.3);border-radius:14px;padding:13px 15px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:16px}
+.prc{background:var(--s);border:1px solid var(--br);border-radius:12px;padding:11px 14px;display:flex;gap:12px;align-items:center;margin-bottom:8px;box-shadow:var(--sh);cursor:pointer;transition:border-color .15s}
+.prc:hover{border-color:var(--g)}
+.pav{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.bdg{font-size:9px;font-weight:800;padding:3px 8px;border-radius:8px}
+.bh{background:var(--rd);color:var(--r)}.bw2{background:var(--od);color:var(--o)}.bk{background:var(--gd);color:var(--g)}
+.tip{background:var(--gd);border-left:3px solid var(--g);border-radius:0 10px 10px 0;padding:10px 12px;font-size:12px;line-height:1.6;margin:8px 0}
+.tip strong{color:var(--g)}
+.sttl{font-size:12px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1.5px;display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:18px}
+.slnk{font-size:11px;color:var(--g);font-weight:600;cursor:pointer;text-transform:none;letter-spacing:0}
+.scard{background:var(--s);border:1px solid var(--br);border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:var(--sh)}
+.si{padding:13px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--br);cursor:pointer;transition:background .12s}
+.si:last-child{border-bottom:none}.si:hover{background:var(--s2)}
+.tgl{width:40px;height:22px;border-radius:11px;position:relative;cursor:pointer;flex-shrink:0}
+.tgl.on{background:var(--g)}.tgl.off{background:var(--br)}
+.tgl::after{content:'';position:absolute;top:3px;width:16px;height:16px;border-radius:50%;background:#fff}
+.tgl.off::after{left:3px}.tgl.on::after{left:21px}
+.pub{background:var(--s);border:1px solid var(--br);border-radius:14px;overflow:hidden;margin-bottom:10px;box-shadow:var(--sh)}
+.pub-img{height:90px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:32px;position:relative}
+.pub-tag{position:absolute;top:8px;right:8px;font-size:9px;font-weight:800;padding:3px 9px;border-radius:8px}
+.pt-s{background:var(--bd);color:var(--b);border:1px solid rgba(37,99,235,.2)}
+.pt-p{background:var(--gd);color:var(--g);border:1px solid rgba(22,163,74,.2)}
+.adc{background:var(--s);border:1px solid var(--br);border-radius:14px;overflow:hidden;margin-bottom:12px;box-shadow:var(--sh)}
+.adc-h{padding:13px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--br)}
+.adc-s{display:grid;grid-template-columns:repeat(4,1fr);padding:11px 16px;gap:8px;background:var(--s2);border-bottom:1px solid var(--br);text-align:center}
+.asv{font-family:'Syne',sans-serif;font-size:15px;font-weight:800}
+.asl{font-size:9px;color:var(--t3);margin-top:1px}
+.adf{padding:11px 16px}
+.bbar{height:5px;background:var(--br);border-radius:4px;overflow:hidden;margin:5px 0 10px}
+.bfill{height:100%;border-radius:4px;background:var(--g)}
+.adacts{display:flex;gap:6px}
+.adbn{flex:1;padding:8px;border-radius:8px;border:none;font-size:11px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+.ap{background:var(--od);color:var(--o)}.ae{background:var(--bd);color:var(--b)}
+/* CHAT */
+.chat-hdr{background:#075e54;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:200;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.chat-area{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:5px;background:#e5ddd5;max-height:calc(100vh - 230px)}
+.bbl{display:flex;align-items:flex-end;gap:5px}.bbl.out{flex-direction:row-reverse}
+.bb{max-width:78%;padding:8px 11px 6px;border-radius:10px;font-size:13px;line-height:1.5;box-shadow:var(--sh)}
+.bb-in{background:#fff;border-radius:0 10px 10px 10px;color:var(--t)}
+.bb-out{background:#dcf8c6;border-radius:10px 10px 0 10px;color:var(--t)}
+.bba{width:25px;height:25px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.ai-lbl{font-size:9px;color:#075e54;font-weight:800;margin-bottom:3px}
+.mt{font-size:9px;color:var(--t3);text-align:right;margin-top:2px}
+.tick{font-size:10px;color:#53bdeb}
+.tw{display:none}
+.tbub{background:#fff;border-radius:0 10px 10px 10px;padding:10px 14px;display:inline-flex;gap:4px;box-shadow:var(--sh)}
+.td{width:7px;height:7px;background:#aaa;border-radius:50%;animation:td 1.4s ease-in-out infinite}
+.td:nth-child(2){animation-delay:.2s}.td:nth-child(3){animation-delay:.4s}
+@keyframes td{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-5px);opacity:1}}
+.chat-qr{display:flex;gap:6px;padding:7px 12px;background:#f0f2f5;border-top:1px solid var(--br);overflow-x:auto;scrollbar-width:none}
+.chat-qr::-webkit-scrollbar{display:none}
+.qr{padding:5px 12px;border-radius:16px;font-size:11px;font-weight:600;background:#fff;border:1px solid var(--br);color:#075e54;cursor:pointer;white-space:nowrap;box-shadow:var(--sh)}
+.chat-iw{padding:8px 12px 16px;background:var(--s);border-top:1px solid var(--br)}
+.ai-tgl{display:flex;align-items:center;gap:8px;padding:7px 12px;background:var(--s2);border-radius:10px;border:1px solid var(--br);margin-bottom:8px}
+.cinrow{display:flex;gap:8px;align-items:flex-end}
+.cin{flex:1;background:var(--s2);border:1px solid var(--br);border-radius:11px;padding:10px 14px;font-size:13px;color:var(--t);font-family:'Plus Jakarta Sans',sans-serif;outline:none;resize:none;min-height:40px;max-height:100px}
+.cin:focus{border-color:var(--g)}
+.csnd{width:40px;height:40px;border-radius:50%;background:#075e54;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:#fff;box-shadow:var(--sh2)}
+/* LANDING */
+.hero{padding:50px 22px 36px;background:linear-gradient(180deg,#f0fdf4 0%,#fff 100%)}
+.htag{display:inline-flex;align-items:center;gap:6px;background:var(--gd);border:1px solid rgba(22,163,74,.3);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--g);margin-bottom:16px}
+.ldot{width:7px;height:7px;background:var(--g);border-radius:50%;animation:bk 1.5s ease-in-out infinite}
+@keyframes bk{0%,100%{opacity:1}50%{opacity:.3}}
+.btn-g{background:var(--g);color:#fff;border:none;border-radius:12px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:100%;margin-bottom:10px}
+.btn-o{background:#fff;color:var(--g);border:2px solid var(--g);border-radius:12px;padding:13px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;width:100%;margin-bottom:10px}
+.dp{background:#fff;border-radius:18px;overflow:hidden;max-width:300px;margin:0 auto;box-shadow:0 8px 30px rgba(0,0,0,.12)}
+.dp-h{background:#075e54;padding:9px 14px;display:flex;align-items:center;gap:9px}
+.dp-av{width:30px;height:30px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.dp-ch{background:#e5ddd5;padding:11px;display:flex;flex-direction:column;gap:5px}
+.dm{padding:7px 10px;border-radius:8px;font-size:12px;line-height:1.5;max-width:82%}
+.dm-i{background:#fff;align-self:flex-start;border-radius:0 8px 8px 8px}
+.dm-o{background:#dcf8c6;align-self:flex-end;border-radius:8px 0 8px 8px}
+.dm-l{font-size:9px;font-weight:700;color:#075e54;margin-bottom:2px}
+.dm-t{font-size:9px;color:#999;text-align:right;margin-top:1px}
+.dm-sale{background:#25d366;color:#fff;padding:7px 11px;border-radius:8px;font-size:11px;font-weight:800;text-align:center}
+.sim-c{background:var(--s);border:1px solid var(--br);border-radius:14px;padding:14px;box-shadow:var(--sh)}
+.sim-b{background:#fff;border:2px solid var(--br);border-radius:10px;padding:10px 14px;font-size:12px;font-weight:600;cursor:pointer;text-align:left;width:100%;margin-bottom:8px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--t);display:block;transition:all .2s}
+.sim-b:hover,.sim-b.on{border-color:var(--g);background:var(--gd);color:var(--g)}
+.sim-r{display:none;background:#fff;border:1px solid var(--br);border-radius:12px;padding:13px;margin-top:10px}
+.sim-r.on{display:block;animation:fi .3s ease}
+.sim-n{background:var(--rd);border:1px solid rgba(220,38,38,.2);border-radius:10px;padding:9px 12px;font-size:12px;color:var(--r);font-weight:700;margin-top:8px;display:flex;align-items:center;gap:6px}
+.pc{background:var(--s);border:2px solid var(--br);border-radius:16px;padding:18px;margin-bottom:10px;position:relative;box-shadow:var(--sh)}
+.pc.ft{border-color:var(--g);background:linear-gradient(135deg,#f0fdf4,#fff)}
+.pc-bdg{position:absolute;top:12px;right:12px;background:var(--g);color:#fff;font-size:10px;font-weight:700;padding:3px 10px;border-radius:8px}
+.pc-pl{font-size:11px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.pc-pr{font-family:'Syne',sans-serif;font-size:27px;font-weight:800;line-height:1;margin-bottom:3px}
+.pc-pe{font-size:12px;color:var(--t3);margin-bottom:12px}
+.pc-f{font-size:12px;color:var(--t2);display:flex;gap:6px;margin-bottom:6px}
+.pc-f::before{content:'✓';color:var(--g);font-weight:800;flex-shrink:0}
+.pc-bn{width:100%;padding:12px;border-radius:11px;border:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:12px}
+.pb-g{background:var(--g);color:#fff}.pb-d{background:var(--s2);color:var(--t);border:1px solid var(--br)}
+.fqi{background:var(--s);border:1px solid var(--br);border-radius:12px;overflow:hidden;cursor:pointer;margin-bottom:8px;box-shadow:var(--sh)}
+.fqq{padding:13px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.fqq-t{font-size:13px;font-weight:700;flex:1}
+.fqa-arr{font-size:11px;color:var(--t3);transition:transform .2s}
+.fqi.on .fqa-arr{transform:rotate(180deg)}
+.fqa{display:none;padding:0 16px 13px;font-size:12px;color:var(--t2);line-height:1.7;border-top:1px solid var(--br)}
+.fqa.on{display:block}.fqa strong{color:var(--g)}
+.rh{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(22,163,74,.25);border-radius:16px;padding:16px;margin-bottom:14px}
+.ni{background:var(--s);border:1px solid var(--br);border-radius:13px;padding:13px;display:flex;gap:12px;margin-bottom:8px;box-shadow:var(--sh);cursor:pointer}
+.ni.ur{border-color:rgba(22,163,74,.25);background:#f0fdf4}
+.nico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.ndot{width:8px;height:8px;background:var(--g);border-radius:50%;flex-shrink:0;margin-top:4px}
+.ph{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1px solid rgba(22,163,74,.2);border-radius:18px;padding:20px;text-align:center;margin-bottom:16px}
+.phav{width:72px;height:72px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;font-size:28px;margin:0 auto 10px;border:3px solid #fff;box-shadow:var(--sh2)}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:flex-end;justify-content:center}
+.mov.on{display:flex;animation:fi .2s ease}
+.mod{background:#fff;border-radius:22px 22px 0 0;padding:22px 20px 40px;width:100%;max-width:430px;max-height:90vh;overflow-y:auto;animation:su .3s cubic-bezier(.16,1,.3,1)}
+@keyframes su{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.mh{width:40px;height:4px;background:var(--br);border-radius:2px;margin:0 auto 16px}
+.mf{margin-bottom:13px}
+.ml{font-size:12px;font-weight:700;color:var(--t2);margin-bottom:5px;display:block}
+.mi{width:100%;background:var(--s2);border:1px solid var(--br);border-radius:10px;padding:11px 14px;font-size:14px;color:var(--t);font-family:'Plus Jakarta Sans',sans-serif;outline:none}
+.mi:focus{border-color:var(--g)}
+.mbtn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--g);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px}
+footer{background:var(--s2);border-top:1px solid var(--br);padding:20px;text-align:center;padding-bottom:80px}
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav class="nav">
-  <div class="nav-logo">
-    <img src="logo.png" alt="GrowthAI Africa" onerror="this.style.display='none'">
-    <div class="nav-logo-text">Growth<span>AI Africa</span></div>
+<!-- PAGE 1: SITE LANDING -->
+<div class="pg on" id="pg-home">
+  <div style="background:var(--g);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200">
+    <div class="logo"><img src="logo.png" alt="" onerror="this.style.display='none'"><div class="ltxt" style="color:#fff">Growth<span style="color:#86efac">AI Africa</span></div></div>
+    <button onclick="oMod()" style="background:#fff;color:var(--g);border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">Essai gratuit</button>
   </div>
-  <button class="nav-cta" onclick="openModal()">Essai gratuit</button>
-</nav>
-
-<!-- HERO -->
-<div class="hero">
-  <div class="hero-tag"><div class="live-dot"></div>Actif à Yaoundé & Douala</div>
-  <h1 class="hero-title">Transformez vos messages en <span>ventes</span> automatiquement</h1>
-  <p class="hero-sub">GrowthAI Africa répond à vos clients 24h/24, relance vos prospects et conclut des ventes — pendant que vous dormez.</p>
-  <button class="btn-green" onclick="openModal()">🚀 Démarrer l'essai gratuit — 30 jours</button>
-  <button class="btn-outline" onclick="document.getElementById('simulation').scrollIntoView({behavior:'smooth'})">🎮 Tester la démo interactive ↓</button>
-  <p class="hero-note">✓ 30 jours gratuits · ✓ Sans carte bancaire · ✓ Résultats en 48h</p>
-  <div class="hero-stats">
-    <div class="hs"><div class="hs-val">+35%</div><div class="hs-label">Ventes en plus</div></div>
-    <div class="hs"><div class="hs-val">89%</div><div class="hs-label">Réponses auto</div></div>
-    <div class="hs"><div class="hs-val">3.8x</div><div class="hs-label">ROI moyen</div></div>
-  </div>
-</div>
-
-<!-- DÉMO VISUELLE -->
-<div class="demo-section">
-  <div class="demo-title">🎬 Exemple réel — Vente en 4 minutes</div>
-  <div class="demo-phone">
-    <div class="demo-hdr">
-      <div class="demo-av">🤖</div>
-      <div><div style="font-size:13px;font-weight:700;color:white">GrowthAI Africa</div><div style="font-size:11px;color:rgba(255,255,255,0.7)">● En ligne</div></div>
-    </div>
-    <div class="demo-chat">
-      <div class="dm dm-in">Bonjour, vous avez des robes taille M ?</div>
-      <div class="dm dm-out"><div class="dm-lbl">🤖 GrowthAI — 12 sec</div>Bonjour ! 😊 Oui, tailles S à XL. Pour quelle occasion ?<div class="dm-time">14:32</div></div>
-      <div class="dm dm-in">Soirée samedi. C'est combien ?</div>
-      <div class="dm dm-out"><div class="dm-lbl">🤖 GrowthAI — 8 sec</div>25 000 – 45 000 FCFA 🎉 Livraison gratuite Yaoundé !<div class="dm-time">14:33</div></div>
-      <div class="dm dm-in">Je prends la rouge à 35 000 FCFA</div>
-      <div class="dm-sale">✅ VENTE CONCLUE — 35 000 FCFA 🎉</div>
-      <div class="demo-note">Durée : 4 min · Zéro intervention humaine</div>
+  <div class="hero">
+    <div class="htag"><div class="ldot"></div>Actif à Yaoundé & Douala</div>
+    <h1 style="font-family:'Syne',sans-serif;font-size:30px;font-weight:800;line-height:1.1;letter-spacing:-1px;margin-bottom:12px">Transformez vos messages en <span style="color:var(--g)">ventes</span> automatiquement</h1>
+    <p style="font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:20px">GrowthAI Africa répond à vos clients 24h/24, relance vos prospects et conclut des ventes — pendant que vous dormez.</p>
+    <button class="btn-g" onclick="oMod()">🚀 Démarrer l'essai gratuit — 30 jours</button>
+    <button class="btn-o" onclick="gNav('pg-chat','bni-chat')">💬 Tester le chatbot IA maintenant</button>
+    <button class="btn-o" style="border-color:var(--b);color:var(--b)" onclick="gNav('pg-app','bni-app')">📱 Voir le dashboard complet</button>
+    <p style="font-size:11px;color:var(--t3);text-align:center;margin-bottom:18px">✓ 30 jours gratuits · ✓ Sans carte bancaire · ✓ Résultats en 48h</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="background:#fff;border:1px solid var(--br);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--g)">+35%</div><div style="font-size:10px;color:var(--t3);margin-top:2px">Ventes en plus</div></div>
+      <div style="background:#fff;border:1px solid var(--br);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--g)">89%</div><div style="font-size:10px;color:var(--t3);margin-top:2px">Réponses auto</div></div>
+      <div style="background:#fff;border:1px solid var(--br);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--g)">3.8x</div><div style="font-size:10px;color:var(--t3);margin-top:2px">ROI moyen</div></div>
     </div>
   </div>
-</div>
 
-<!-- SIMULATION INTERACTIVE -->
-<div class="sim-section" id="simulation">
-  <div class="stag">🎮 Démo interactive</div>
-  <h2 class="stitle">Testez GrowthAI Africa</h2>
-  <p class="ssub">Cliquez sur un scénario et voyez la réaction automatique en temps réel.</p>
-  <div class="sim-card">
-    <div class="sim-label">📱 Simulez un message client :</div>
-    <div class="sim-btns">
-      <button class="sim-btn" onclick="simulate(this,'hot1')">👗 "Je cherche une robe taille M urgente Yaoundé"</button>
-      <button class="sim-btn" onclick="simulate(this,'hot2')">💄 "I need a wig for tomorrow, how much?"</button>
-      <button class="sim-btn" onclick="simulate(this,'warm1')">🍽️ "Vous faites livraison de nourriture ?"</button>
-      <button class="sim-btn" onclick="simulate(this,'warm2')">📱 "C'est combien le Samsung S24 ?"</button>
-      <button class="sim-btn" onclick="simulate(this,'cold1')">💬 "Bonjour"</button>
-    </div>
-    <div class="sim-result" id="sim-result">
-      <div class="sim-score-row" id="sim-score"></div>
-      <div class="sim-reply-box" id="sim-reply"></div>
-      <div class="sim-notif" id="sim-notif" style="display:none">🔴 Notification WhatsApp envoyée au commercial !</div>
+  <!-- DEMO -->
+  <div style="padding:20px 22px 28px;background:#f0fdf4">
+    <div style="font-size:11px;font-weight:800;color:var(--g);text-transform:uppercase;letter-spacing:2px;text-align:center;margin-bottom:12px">Exemple réel — Vente en 4 minutes</div>
+    <div class="dp">
+      <div class="dp-h"><div class="dp-av">🤖</div><div><div style="font-size:13px;font-weight:700;color:#fff">GrowthAI Africa</div><div style="font-size:11px;color:rgba(255,255,255,.7)">● En ligne</div></div></div>
+      <div class="dp-ch">
+        <div class="dm dm-i">Bonjour, des robes taille M ?</div>
+        <div class="dm dm-o"><div class="dm-l">🤖 12 sec</div>Bonjour ! 😊 Oui, S à XL. Pour quelle occasion ?<div class="dm-t">14:32</div></div>
+        <div class="dm dm-i">Soirée samedi. Prix ?</div>
+        <div class="dm dm-o"><div class="dm-l">🤖 8 sec</div>25 000–45 000 FCFA 🎉 Livraison gratuite Yaoundé !<div class="dm-t">14:33</div></div>
+        <div class="dm dm-i">Je prends la rouge à 35 000</div>
+        <div class="dm-sale">✅ VENTE CONCLUE — 35 000 FCFA</div>
+        <div style="text-align:center;font-size:10px;color:#888;margin-top:5px">4 min · Zéro intervention humaine</div>
+      </div>
     </div>
   </div>
+
+  <!-- SIMULATION -->
+  <div style="padding:24px 22px">
+    <div style="font-size:11px;font-weight:800;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Démo interactive</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px">Testez GrowthAI Africa</h2>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:14px">Cliquez sur un scénario et voyez la réaction automatique.</p>
+    <div class="sim-c">
+      <button class="sim-b" onclick="sim(this,'h1')">👗 "Je cherche une robe taille M urgente Yaoundé"</button>
+      <button class="sim-b" onclick="sim(this,'h2')">💄 "I need a wig for tomorrow, how much?"</button>
+      <button class="sim-b" onclick="sim(this,'w1')">🍽️ "Vous faites livraison de nourriture ?"</button>
+      <button class="sim-b" onclick="sim(this,'w2')">📱 "C'est combien le Samsung S24 ?"</button>
+      <button class="sim-b" onclick="sim(this,'c1')" style="margin-bottom:0">💬 "Bonjour"</button>
+      <div class="sim-r" id="sim-r">
+        <div id="sim-sc" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px"></div>
+        <div style="background:var(--gd);border-left:3px solid var(--g);border-radius:0 10px 10px 0;padding:10px 12px;font-size:13px;line-height:1.6" id="sim-rp"></div>
+        <div class="sim-n" id="sim-nt" style="display:none">🔴 Notification WhatsApp envoyée au commercial !</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div style="padding:0 22px 24px;background:var(--s2)">
+    <div style="padding-top:22px;font-size:11px;font-weight:800;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">Tarifs</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px">Choisissez votre plan</h2>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:16px">30 jours gratuits. Prix fixes. Sans commission.</p>
+    <div class="pc"><div class="pc-pl">Basic</div><div class="pc-pr">15 000 FCFA</div><div class="pc-pe">par mois</div><div class="pc-f">Chatbot IA 24h/24</div><div class="pc-f">CRM + publications auto</div><div class="pc-f">Facebook + WhatsApp</div><button class="pc-bn pb-d" onclick="oMod('Basic')">Démarrer gratuit</button></div>
+    <div class="pc ft"><div class="pc-bdg">⭐ Populaire</div><div class="pc-pl">Pro</div><div class="pc-pr" style="color:var(--g)">40 000 FCFA</div><div class="pc-pe">par mois</div><div class="pc-f">Tout Basic +</div><div class="pc-f">Relances 6h/24h + Prospection</div><div class="pc-f">Publicités Meta Ads auto</div><div class="pc-f">FB + WhatsApp + Instagram</div><button class="pc-bn pb-g" onclick="oMod('Pro')">Démarrer gratuit</button></div>
+    <div class="pc"><div class="pc-pl">Enterprise</div><div class="pc-pr" style="color:var(--o)">65 000 FCFA</div><div class="pc-pe">par mois</div><div class="pc-f">Tout Pro + Multi-canal</div><div class="pc-f">Mini-site e-commerce</div><div class="pc-f">Support personnalisé</div><button class="pc-bn pb-d" onclick="oMod('Enterprise')">Nous contacter</button></div>
+  </div>
+
+  <!-- FAQ -->
+  <div style="padding:22px">
+    <div style="font-size:11px;font-weight:800;color:var(--g);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">FAQ</div>
+    <h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:14px">Questions fréquentes</h2>
+    <div class="fqi" onclick="faq(this)"><div class="fqq"><div class="fqq-t">C'est compliqué à utiliser ?</div><div class="fqa-arr">▼</div></div><div class="fqa">Non. Vous recevez juste des <strong>notifications WhatsApp</strong> quand un client est prêt à acheter. Tout le reste est automatique.</div></div>
+    <div class="fqi" onclick="faq(this)"><div class="fqq"><div class="fqq-t">Quand verrai-je les premiers résultats ?</div><div class="fqa-arr">▼</div></div><div class="fqa">Le chatbot répond dès la <strong>première heure</strong>. Les premières ventes arrivent dans la première semaine.</div></div>
+    <div class="fqi" onclick="faq(this)"><div class="fqq"><div class="fqq-t">Comment je paie ?</div><div class="fqa-arr">▼</div></div><div class="fqa">Par <strong>MTN Mobile Money, Orange Money ou Wave</strong>. Simple, sans carte bancaire.</div></div>
+  </div>
+
+  <!-- CTA FINAL -->
+  <div style="padding:22px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-top:1px solid rgba(22,163,74,.2)">
+    <h2 style="font-family:'Syne',sans-serif;font-size:22px;margin-bottom:8px">Prêt à vendre <span style="color:var(--g)">plus</span> ?</h2>
+    <p style="font-size:13px;color:var(--t2);margin-bottom:16px">30 jours gratuits. Activation en 48h.</p>
+    <button class="btn-g" onclick="oMod()">🚀 Démarrer gratuitement</button>
+    <button class="btn-o" style="background:#25d366;color:#fff;border-color:#25d366" onclick="cWA()">💬 Contacter sur WhatsApp</button>
+    <p style="font-size:11px;color:var(--t3);text-align:center;margin-top:8px">✓ Sans engagement · ✓ Sans carte bancaire</p>
+  </div>
+  <footer>
+    <div class="logo" style="justify-content:center;margin-bottom:6px"><img src="logo.png" alt="" style="height:22px" onerror="this.style.display='none'"><div class="ltxt">Growth<span>AI Africa</span></div></div>
+    <div style="font-size:12px;color:var(--t2);margin-bottom:3px">L'IA qui fait vendre plus pour les PME africaines</div>
+    <div style="font-size:11px;color:var(--t3)">© 2026 GrowthAI Africa — Yaoundé, Cameroun</div>
+  </footer>
 </div>
 
-<!-- PROBLÈME -->
-<div class="prob-section">
-  <div class="stag">Le problème</div>
-  <h2 class="stitle" style="margin-bottom:10px">Pourquoi vous perdez des ventes</h2>
-  <p class="ssub">Sans système, vos clients passent chez le concurrent.</p>
-  <div class="prob-card"><div class="prob-icon">😴</div><div><div class="prob-title">Réponses tardives</div><div class="prob-desc">Un client qui attend +30 min achète ailleurs. Vous perdez des ventes la nuit et le weekend.</div><div class="prob-cost">→ 60% des ventes perdues la nuit</div></div></div>
-  <div class="prob-card"><div class="prob-icon">📉</div><div><div class="prob-title">Prospects non relancés</div><div class="prob-desc">80% des prospects intéressés ne sont jamais relancés. Ils oublient, vous oubliez.</div><div class="prob-cost">→ Des millions de FCFA perdus</div></div></div>
-  <div class="prob-card"><div class="prob-icon">😰</div><div><div class="prob-title">Trop de messages à gérer</div><div class="prob-desc">Répondre à 50 messages par jour prend 3-4 heures de votre temps.</div><div class="prob-cost">→ 3h/jour gaspillées</div></div></div>
-</div>
-
-<!-- SOLUTION -->
-<div class="sol-section">
-  <div class="stag">La solution</div>
-  <h2 class="stitle" style="margin-bottom:10px">4 étapes simples</h2>
-  <p class="ssub">Simple, automatique, efficace.</p>
-  <div class="sol-step"><div class="sol-num">1</div><div><div class="sol-title">💬 Réponse en moins de 2 min</div><div class="sol-desc">Chatbot IA répond 24h/24 en français, anglais ou pidgin.</div></div></div>
-  <div class="sol-step"><div class="sol-num">2</div><div><div class="sol-title">🎯 Qualification automatique</div><div class="sol-desc">L'IA classe vos prospects : Chaud 🔴, Tiède 🟡 ou Froid 🔵. Alerte WhatsApp immédiate.</div></div></div>
-  <div class="sol-step"><div class="sol-num">3</div><div><div class="sol-title">🔄 Relance après 6h et 24h</div><div class="sol-desc">Si pas de réponse, relance automatique avec offre spéciale.</div></div></div>
-  <div class="sol-step"><div class="sol-num">4</div><div><div class="sol-title">💰 Ventes enregistrées</div><div class="sol-desc">Chaque vente est sauvegardée. ROI visible en temps réel.</div></div></div>
-</div>
-
-<!-- RÉSULTATS -->
-<div class="results-section">
-  <div class="stag">Résultats</div>
-  <h2 class="stitle" style="margin-bottom:16px">Ce que nos clients gagnent</h2>
-  <div class="results-grid">
-    <div class="result-card"><div class="result-val">+35%</div><div class="result-label">Ventes supplémentaires dès le 1er mois</div></div>
-    <div class="result-card"><div class="result-val">89%</div><div class="result-label">Messages traités automatiquement</div></div>
-    <div class="result-card"><div class="result-val">3h</div><div class="result-label">Économisées chaque jour</div></div>
-    <div class="result-card"><div class="result-val">3.8x</div><div class="result-label">ROI sur les publicités</div></div>
+<!-- PAGE 2: CHAT IA -->
+<div class="pg" id="pg-chat">
+  <div class="chat-hdr">
+    <div style="font-size:19px;color:rgba(255,255,255,.8);cursor:pointer" onclick="gNav('pg-home','bni-home')">←</div>
+    <div style="width:38px;height:38px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid rgba(255,255,255,.3)">🤖</div>
+    <div style="flex:1"><div style="font-size:14px;font-weight:700;color:#fff">GrowthAI Africa</div><div style="font-size:11px;color:rgba(255,255,255,.7)" id="cst">● En ligne — répond en moins de 2 min</div></div>
+    <div style="font-size:10px;font-weight:800;padding:3px 10px;border-radius:10px;background:rgba(255,255,255,.15);color:#fff" id="cbdg">Score: 0</div>
+  </div>
+  <div id="cnb" style="display:none;background:var(--r);color:#fff;font-size:12px;font-weight:700;padding:6px 16px;text-align:center">🔴 Prospect CHAUD ! Commercial notifié !</div>
+  <div class="chat-qr">
+    <div onclick="sendQ('Bonjour 👋')" class="qr">👋 Bonjour</div>
+    <div onclick="sendQ('Je cherche une robe taille M')" class="qr">👗 Je cherche</div>
+    <div onclick="sendQ('C\'est combien ?')" class="qr">💰 Prix ?</div>
+    <div onclick="sendQ('Vous livrez à Yaoundé ?')" class="qr">🚚 Livraison ?</div>
+    <div onclick="sendQ('Je veux commander')" class="qr">🛒 Commander</div>
+    <div onclick="sendQ('I need a wig urgent Yaoundé')" style="background:#fee2e2;border-color:rgba(220,38,38,.2);color:var(--r)" class="qr">🔴 Test HOT</div>
+  </div>
+  <div class="chat-area" id="carea">
+    <div style="text-align:center;font-size:10px;color:#888;margin:4px 0"><span style="background:#fff;padding:4px 10px;border-radius:8px;box-shadow:var(--sh)">Aujourd'hui</span></div>
+    <div class="tw" id="tw"><div class="tbub"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>
+  </div>
+  <div class="chat-iw">
+    <div class="ai-tgl">
+      <div style="font-size:15px">🤖</div>
+      <div style="flex:1"><div style="font-size:11px;font-weight:600">Mode IA automatique</div><div style="font-size:10px;color:var(--t3)">L'IA répond à votre place</div></div>
+      <div class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div>
+    </div>
+    <div class="cinrow">
+      <textarea class="cin" id="cin" placeholder="Message..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+      <button class="csnd" onclick="sendChat()">➤</button>
+    </div>
   </div>
 </div>
 
-<!-- TÉMOIGNAGES -->
-<div class="testi-section">
-  <div class="stag">Témoignages</div>
-  <h2 class="stitle" style="margin-bottom:16px">Ils vendent plus grâce à GrowthAI Africa</h2>
-  <div class="testi-card"><div class="testi-stars">⭐⭐⭐⭐⭐</div><div class="testi-text">"Je me réveille avec des commandes déjà passées ! Le chatbot répond pendant que je dors."</div><div style="display:flex;align-items:center;gap:8px"><div style="width:34px;height:34px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:16px">👩</div><div><div class="testi-name">Marie K. — Boutique Mode, Yaoundé</div><div class="testi-result">+45 000 FCFA de ventes supplémentaires / mois</div></div></div></div>
-  <div class="testi-card"><div class="testi-stars">⭐⭐⭐⭐⭐</div><div class="testi-text">"ROI de 4x sur mes publicités. Je dépense 10 000 FCFA et génère 40 000 FCFA."</div><div style="display:flex;align-items:center;gap:8px"><div style="width:34px;height:34px;border-radius:50%;background:var(--gold-dim);display:flex;align-items:center;justify-content:center;font-size:16px">👨</div><div><div class="testi-name">Paul M. — Vendeur Téléphones, Douala</div><div class="testi-result">ROI 4x sur les publicités Meta</div></div></div></div>
-</div>
-
-<!-- PRICING -->
-<div class="pricing-section" id="pricing">
-  <div class="stag">Tarifs</div>
-  <h2 class="stitle" style="margin-bottom:10px">Choisissez votre plan</h2>
-  <p style="font-size:13px;color:var(--text2);margin-bottom:20px">Prix fixes. Sans commission. 30 jours gratuits.</p>
-  <div class="pc"><div class="pc-plan">Basic</div><div class="pc-price">15 000 FCFA</div><div class="pc-period">par mois</div><div class="pc-feat">Chatbot vendeur IA 24h/24</div><div class="pc-feat">CRM et suivi des ventes</div><div class="pc-feat">Publications automatiques</div><div class="pc-feat">Facebook + WhatsApp</div><button class="pc-btn pc-btn-d" onclick="openModal('Basic')">Démarrer gratuit</button></div>
-  <div class="pc featured"><div class="pc-badge">⭐ Populaire</div><div class="pc-plan">Pro</div><div class="pc-price">40 000 FCFA</div><div class="pc-period">par mois</div><div class="pc-feat">Tout Basic +</div><div class="pc-feat">Relances automatiques 6h/24h</div><div class="pc-feat">Publicités Meta Ads auto</div><div class="pc-feat">Prospection intelligente</div><div class="pc-feat">FB + WhatsApp + Instagram</div><button class="pc-btn pc-btn-g" onclick="openModal('Pro')">Démarrer gratuit</button></div>
-  <div class="pc"><div class="pc-plan">Enterprise</div><div class="pc-price">65 000 FCFA</div><div class="pc-period">par mois</div><div class="pc-feat">Tout Pro +</div><div class="pc-feat">Multi-canal (LinkedIn, TikTok)</div><div class="pc-feat">Mini-site e-commerce</div><div class="pc-feat">Support personnalisé dédié</div><button class="pc-btn pc-btn-d" onclick="openModal('Enterprise')">Nous contacter</button></div>
-</div>
-
-<!-- FAQ -->
-<div class="faq-section">
-  <div class="stag">FAQ</div>
-  <h2 class="stitle" style="margin-bottom:16px">Questions fréquentes</h2>
-  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-question">C'est compliqué à utiliser ?</div><div class="faq-arrow">▼</div></div><div class="faq-a">Non. Vous recevez juste des <strong>notifications WhatsApp</strong> quand un client est prêt à acheter. Tout le reste est automatique.</div></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-question">Quand verrai-je les premiers résultats ?</div><div class="faq-arrow">▼</div></div><div class="faq-a">Le chatbot répond dès la <strong>première heure</strong>. Les premières ventes arrivent dans la première semaine.</div></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-question">Ça marche pour mon secteur ?</div><div class="faq-arrow">▼</div></div><div class="faq-a">Si vous vendez sur Facebook, WhatsApp ou Instagram — <strong>oui</strong>. Mode, beauté, coiffure, restaurant, téléphones, e-commerce.</div></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-question">Je peux annuler à tout moment ?</div><div class="faq-arrow">▼</div></div><div class="faq-a"><strong>Oui, aucun engagement.</strong> 30 premiers jours 100% gratuits. Annulation libre.</div></div>
-  <div class="faq-item" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-question">Comment je paie ?</div><div class="faq-arrow">▼</div></div><div class="faq-a">Par <strong>MTN Mobile Money, Orange Money ou Wave</strong>. Simple, sans carte bancaire.</div></div>
-</div>
-
-<!-- FINAL CTA -->
-<div class="cta-section">
-  <div class="fc-box">
-    <h2 class="fc-title">Prêt à vendre <span>plus</span> cette semaine ?</h2>
-    <p class="fc-sub">30 jours gratuits. Activation en 48h. Résultats dès la première semaine.</p>
-    <button class="btn-green" onclick="openModal()">🚀 Démarrer gratuitement</button>
-    <button class="fc-wa" onclick="contactWA()">💬 Contacter sur WhatsApp</button>
-    <p class="fc-note">✓ Sans engagement · ✓ Sans carte bancaire · ✓ Support WhatsApp inclus</p>
+<!-- PAGE 3: DASHBOARD -->
+<div class="pg" id="pg-app">
+  <div class="hdr">
+    <div class="hrow">
+      <div class="logo"><img src="logo.png" alt="" onerror="this.style.display='none'"><div class="ltxt">Growth<span>AI Africa</span></div></div>
+      <div style="display:flex;gap:8px">
+        <div class="hbtn" onclick="gNav('pg-notif','bni-notif')">🔔<div class="hdot"></div></div>
+        <div class="hbtn" onclick="gNav('pg-prof','bni-prof')" style="background:var(--g);border-color:var(--g);color:#fff;font-weight:800;font-size:13px">A</div>
+      </div>
+    </div>
+  </div>
+  <div class="scr">
+    <div style="margin-bottom:16px">
+      <div style="font-size:11px;color:var(--t3);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">Mercredi 16 Avril 2026</div>
+      <div style="font-family:'Syne',sans-serif;font-size:21px;font-weight:800">Bonjour, <span style="color:var(--g)">Ambera</span> 👋</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:3px">Résumé commercial du jour</div>
+    </div>
+    <div class="alrt" onclick="gNav('pg-crm','bni-crm')">
+      <div style="font-size:24px">🔴</div>
+      <div><div style="font-size:13px;font-weight:700;color:var(--g)">3 prospects chauds en attente !</div><div style="font-size:11px;color:var(--t2);margin-top:2px">Répondez maintenant pour ne pas perdre ces ventes</div></div>
+      <div style="color:var(--g);font-size:16px;margin-left:auto">→</div>
+    </div>
+    <div class="sg">
+      <div class="sc" onclick="gNav('pg-chat','bni-chat')"><div style="font-size:16px;margin-bottom:6px">💬</div><div class="sv cb">47</div><div class="sl">Messages reçus</div><div class="scg">↑ +12 aujourd'hui</div></div>
+      <div class="sc" onclick="gNav('pg-crm','bni-crm')"><div style="font-size:16px;margin-bottom:6px">🔥</div><div class="sv cr">3</div><div class="sl">Prospects chauds</div><div class="scg">↑ +1 ce matin</div></div>
+      <div class="sc" onclick="gNav('pg-pub','bni-pub')"><div style="font-size:16px;margin-bottom:6px">📝</div><div class="sv" style="color:#7c3aed">5</div><div class="sl">Posts planifiés</div><div class="scg">↑ 2 aujourd'hui</div></div>
+      <div class="sc" onclick="gNav('pg-ads','bni-ads')"><div style="font-size:16px;margin-bottom:6px">📣</div><div class="sv" style="color:#db2777">2</div><div class="sl">Pubs actives</div><div class="scg">ROI 3.8x</div></div>
+      <div class="sc"><div style="font-size:16px;margin-bottom:6px">✅</div><div class="sv cg">4</div><div class="sl">Ventes aujourd'hui</div><div class="scg">↑ +2 vs hier</div></div>
+      <div class="sc"><div style="font-size:16px;margin-bottom:6px">💰</div><div class="sv co">240k</div><div class="sl">CA ce mois (FCFA)</div><div class="scg">↑ +18%</div></div>
+    </div>
+    <div class="sttl">🔴 Prospects chauds <span class="slnk" onclick="gNav('pg-crm','bni-crm')">Voir tous →</span></div>
+    <div class="prc" onclick="gNav('pg-chat','bni-chat')"><div class="pav" style="background:var(--rd)">👩</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">"Je veux commander 3 robes taille M"</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="font-size:10px;color:var(--t3)">5 min</div><div class="bdg bh">🔴 Chaud</div></div></div>
+    <div class="prc" onclick="gNav('pg-chat','bni-chat')"><div class="pav" style="background:var(--od)">👨</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Paul Mballa</div><div style="font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">"Combien pour 10 unités ?"</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div style="font-size:10px;color:var(--t3)">23 min</div><div class="bdg bh">🔴 Chaud</div></div></div>
   </div>
 </div>
 
-<footer>
-  <div class="footer-logo">Growth<span>AI Africa</span></div>
-  <div style="font-size:12px;color:var(--text2);margin:6px 0">L'IA qui fait vendre plus pour les PME africaines</div>
-  <div style="font-size:11px;color:var(--text3)">© 2026 GrowthAI Africa — Yaoundé, Cameroun</div>
-</footer>
+<!-- PAGE 4: PUBLICATIONS -->
+<div class="pg" id="pg-pub">
+  <div class="hdr"><div class="hrow"><div class="ltxt logo">Growth<span>AI Africa</span></div><button onclick="genPost()" style="background:var(--g);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">✨ Créer</button></div></div>
+  <div class="itabs">
+    <div class="itab on" onclick="iTab('pub-cr',this)">✨ Créer IA</div>
+    <div class="itab" onclick="iTab('pub-pl',this)">📅 Planifiées</div>
+    <div class="itab" onclick="iTab('pub-pu',this)">✅ Publiées</div>
+    <div class="itab" onclick="iTab('pub-st',this)">📈 Stats</div>
+  </div>
+  <div class="ipane on" id="pub-cr">
+    <div style="background:linear-gradient(135deg,#f0fdf4,#f8fafb);border:1px solid rgba(22,163,74,.2);border-radius:14px;padding:14px;margin-bottom:12px">
+      <div style="font-size:13px;font-weight:800;color:var(--g);margin-bottom:10px">🤖 Générateur IA</div>
+      <input style="width:100%;background:#fff;border:1px solid var(--br);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--t);font-family:'Plus Jakarta Sans',sans-serif;outline:none;margin-bottom:10px" placeholder="Décrivez votre publication...">
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;background:var(--gd);border:1px solid rgba(22,163,74,.3);color:var(--g);cursor:pointer">📸 Post produit</span>
+        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;background:#fff;border:1px solid var(--br);color:var(--t2);cursor:pointer">🎉 Promotion</span>
+        <span style="padding:4px 12px;border-radius:16px;font-size:11px;font-weight:700;background:#fff;border:1px solid var(--br);color:var(--t2);cursor:pointer">🎬 Vidéo</span>
+      </div>
+      <button id="gen-btn" onclick="genPost()" style="width:100%;padding:12px;border-radius:11px;border:none;background:var(--g);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer">✨ Générer avec l'IA</button>
+    </div>
+    <div id="gen-res" style="display:none">
+      <div class="pub"><div class="pub-img" style="background:#f0fdf4">👗<div class="pub-tag pt-p">🤖 Généré</div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:700;margin-bottom:5px">Nouvelle collection robes d'été</div><div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:10px">✨ NOUVELLE COLLECTION ! Robes S à XL. Livraison Yaoundé 24h. 15k–45k FCFA</div><div style="display:flex;gap:8px"><button style="flex:1;padding:9px;border-radius:9px;border:none;font-size:12px;font-weight:700;cursor:pointer;background:var(--g);color:#fff;font-family:'Plus Jakarta Sans',sans-serif">📤 Publier</button><button style="flex:1;padding:9px;border-radius:9px;border:1px solid var(--b);font-size:12px;font-weight:700;cursor:pointer;background:var(--bd);color:var(--b);font-family:'Plus Jakarta Sans',sans-serif">📅 Planifier</button></div></div></div>
+    </div>
+  </div>
+  <div class="ipane" id="pub-pl">
+    <div class="pub"><div class="pub-img" style="background:#eff6ff">👗<div class="pub-tag pt-s">Aujourd'hui 18h</div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:700">Nouvelle collection robes</div><div style="font-size:11px;color:var(--t2);margin-top:4px">📘📸 Facebook + Instagram</div></div></div>
+    <div class="pub"><div class="pub-img" style="background:#fefce8">🏷️<div class="pub-tag pt-s">Demain 9h</div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:700">Promo weekend -15%</div><div style="font-size:11px;color:var(--t2);margin-top:4px">💬 WhatsApp Status</div></div></div>
+  </div>
+  <div class="ipane" id="pub-pu">
+    <div class="pub"><div class="pub-img" style="background:#fdf2f8">💄<div class="pub-tag pt-p">✓ Publié hier</div></div><div style="padding:12px 14px"><div style="font-size:13px;font-weight:700">Collection cosmétiques</div><div style="display:flex;gap:12px;margin-top:6px"><span style="font-size:10px;color:var(--t2)">👁️ 1.2k</span><span style="font-size:10px;color:var(--t2)">❤️ 87</span><span style="font-size:10px;color:var(--g);font-weight:700">🛒 5 ventes</span></div></div></div>
+  </div>
+  <div class="ipane" id="pub-st">
+    <div class="sg">
+      <div class="sc"><div class="sv cb">6.5k</div><div class="sl">Vues cette semaine</div><div class="scg">↑ +28%</div></div>
+      <div class="sc"><div class="sv cg">28</div><div class="sl">Ventes via posts</div><div class="scg">↑ +8</div></div>
+      <div class="sc"><div class="sv co">420k</div><div class="sl">CA généré (FCFA)</div><div class="scg">↑ +35%</div></div>
+      <div class="sc"><div class="sv" style="color:#db2777">386</div><div class="sl">Interactions</div><div class="scg">↑ +15%</div></div>
+    </div>
+    <div class="tip"><strong>Meilleur créneau :</strong> 18h-20h génère 2.4x plus d'engagement.</div>
+  </div>
+</div>
 
-<!-- STICKY -->
-<div class="sticky" id="sticky">
-  <div><div class="sticky-price">Dès 15 000 FCFA</div><div class="sticky-label">30 jours gratuits</div></div>
-  <button class="sticky-btn" onclick="openModal()">Démarrer →</button>
+<!-- PAGE 5: PUBLICITÉS -->
+<div class="pg" id="pg-ads">
+  <div class="hdr"><div class="hrow"><div class="ltxt logo">Growth<span>AI Africa</span></div><button style="background:linear-gradient(135deg,#1877f2,#e1306c);color:#fff;border:none;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif">+ Créer</button></div></div>
+  <div class="scr">
+    <div class="rh">
+      <div style="font-size:11px;font-weight:700;color:var(--t2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Performance ce mois</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;text-align:center">
+        <div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--g)">3.8x</div><div style="font-size:10px;color:var(--t2);margin-top:2px">ROI moyen</div></div>
+        <div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--o)">380k</div><div style="font-size:10px;color:var(--t2);margin-top:2px">CA (FCFA)</div></div>
+        <div><div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--b)">2.1k</div><div style="font-size:10px;color:var(--t2);margin-top:2px">Touchées</div></div>
+      </div>
+    </div>
+    <div class="sttl">🟢 Campagnes actives</div>
+    <div class="adc">
+      <div class="adc-h"><div style="width:36px;height:36px;border-radius:10px;background:#eff6ff;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0">📘📸</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Collection Robes — Yaoundé</div><div style="font-size:11px;color:var(--t2);margin-top:1px">🎯 Femmes 18-35 ans</div></div><div style="font-size:10px;font-weight:800;padding:3px 9px;border-radius:8px;background:var(--gd);color:var(--g);border:1px solid rgba(22,163,74,.2)">● Actif</div></div>
+      <div class="adc-s"><div><div class="asv cb">1.2k</div><div class="asl">Touchées</div></div><div><div class="asv cg">84</div><div class="asl">Clics</div></div><div><div class="asv co">12</div><div class="asl">Ventes</div></div><div><div class="asv cg">4.1x</div><div class="asl">ROI</div></div></div>
+      <div class="adf"><div style="display:flex;justify-content:space-between;font-size:11px;color:var(--t2);margin-bottom:3px"><span>Budget utilisé</span><span style="font-weight:700">6 500 / 10 000 FCFA</span></div><div class="bbar"><div class="bfill" style="width:65%"></div></div><div class="adacts"><button class="adbn ap">⏸ Pause</button><button class="adbn ae">✏️ Modifier</button></div></div>
+    </div>
+    <div class="tip"><strong>🎯 Retargeting :</strong> ROI 5.2x sur les visiteurs ayant déjà interagi.</div>
+  </div>
+</div>
+
+<!-- PAGE 6: CRM -->
+<div class="pg" id="pg-crm">
+  <div class="hdr"><div class="hrow"><div class="ltxt logo">Growth<span>AI Africa</span></div><div style="font-size:11px;color:var(--t3)">👥 18 clients</div></div></div>
+  <div class="itabs">
+    <div class="itab on" onclick="iTab('crm-pi',this)">🔄 Pipeline</div>
+    <div class="itab" onclick="iTab('crm-cl',this)">✅ Clients</div>
+    <div class="itab" onclick="iTab('crm-ve',this)">💰 Ventes</div>
+  </div>
+  <div class="ipane on" id="crm-pi">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px">
+      <div class="sc" style="padding:10px 6px;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--r)">3</div><div style="font-size:9px;color:var(--t2);margin-top:2px">🔴 Chauds</div></div>
+      <div class="sc" style="padding:10px 6px;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--o)">8</div><div style="font-size:9px;color:var(--t2);margin-top:2px">🟡 Moyens</div></div>
+      <div class="sc" style="padding:10px 6px;text-align:center"><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--b)">7</div><div style="font-size:9px;color:var(--t2);margin-top:2px">🔵 Faibles</div></div>
+      <div class="sc" style="padding:10px 6px;text-align:center;border-color:var(--g)"><div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--g)">18</div><div style="font-size:9px;color:var(--t2);margin-top:2px">✅ Clients</div></div>
+    </div>
+    <div class="sttl">🔴 Agir maintenant</div>
+    <div class="prc" onclick="gNav('pg-chat','bni-chat')"><div class="pav" style="background:var(--rd)">👩</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Marie Nguema</div><div style="font-size:11px;color:var(--t2)">📘 Facebook · Robes · 5 min</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="bdg bh">🔴 Chaud</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--g)">75 000</div></div></div>
+    <div class="prc" onclick="gNav('pg-chat','bni-chat')"><div class="pav" style="background:var(--od)">👨</div><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:700">Paul Mballa</div><div style="font-size:11px;color:var(--t2)">💬 WhatsApp · 10 unités</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="bdg bh">🔴 Chaud</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--g)">150 000</div></div></div>
+  </div>
+  <div class="ipane" id="crm-cl">
+    <div class="prc"><div class="pav" style="background:var(--gd)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Béatrice Fotso</div><div style="font-size:11px;color:var(--t2)">3 commandes · Dernière : hier</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="bdg bk">⭐ Fidèle</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--g)">135 000</div></div></div>
+    <div class="prc"><div class="pav" style="background:var(--bd)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Sandra Ekotto</div><div style="font-size:11px;color:var(--t2)">5 commandes · Cliente fidèle</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="bdg bk">⭐ Fidèle</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--g)">280 000</div></div></div>
+  </div>
+  <div class="ipane" id="crm-ve">
+    <div class="sg">
+      <div class="sc"><div class="sv cg">240k</div><div class="sl">CA ce mois</div><div class="scg">↑ +18%</div></div>
+      <div class="sc"><div class="sv co">28</div><div class="sl">Ventes ce mois</div><div class="scg">↑ +6</div></div>
+    </div>
+    <div class="prc"><div class="pav" style="background:var(--gd)">👩</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Béatrice Fotso</div><div style="font-size:11px;color:var(--t2)">✅ Robes x2 + Sac · MTN · 2h</div></div><div style="display:flex;flex-direction:column;align-items:flex-end"><div class="bdg bk">✅ Payé</div><div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:800;color:var(--g);margin-top:4px">45 000</div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 7: NOTIFICATIONS -->
+<div class="pg" id="pg-notif">
+  <div class="hdr"><div class="hrow"><div class="ltxt logo">Growth<span>AI Africa</span></div><div style="font-size:12px;font-weight:700;color:var(--g);cursor:pointer">Tout lire</div></div></div>
+  <div class="scr">
+    <div style="font-size:12px;font-weight:800;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">Aujourd'hui</div>
+    <div class="ni ur"><div class="nico" style="background:var(--rd)">🔴</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Prospect chaud détecté !</div><div style="font-size:11px;color:var(--t2);margin-top:2px;line-height:1.5">Marie Nguema veut commander 3 robes</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Il y a 5 min</div></div><div class="ndot"></div></div>
+    <div class="ni ur"><div class="nico" style="background:var(--gd)">✅</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Vente conclue !</div><div style="font-size:11px;color:var(--t2);margin-top:2px;line-height:1.5">Béatrice Fotso a payé 45 000 FCFA</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Il y a 2h</div></div><div class="ndot"></div></div>
+    <div class="ni"><div class="nico" style="background:var(--bd)">📣</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Campagne performante</div><div style="font-size:11px;color:var(--t2);margin-top:2px;line-height:1.5">Pub "Robes Yaoundé" — ROI 4.1x</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Il y a 4h</div></div></div>
+    <div class="ni"><div class="nico" style="background:var(--od)">📊</div><div style="flex:1"><div style="font-size:13px;font-weight:700">Rapport hebdomadaire</div><div style="font-size:11px;color:var(--t2);margin-top:2px;line-height:1.5">47 messages, 3 ventes, ROI 3.8x</div><div style="font-size:10px;color:var(--t3);margin-top:4px">Hier 7h</div></div></div>
+  </div>
+</div>
+
+<!-- PAGE 8: PROFIL -->
+<div class="pg" id="pg-prof">
+  <div class="hdr"><div class="hrow"><div class="ltxt logo">Growth<span>AI Africa</span></div><div style="font-size:14px;cursor:pointer;color:var(--t2)">✏️</div></div></div>
+  <div class="scr">
+    <div class="ph">
+      <div class="phav">🏪</div>
+      <div style="font-family:'Syne',sans-serif;font-size:19px;font-weight:800">Boutique Ambera</div>
+      <div style="font-size:12px;color:var(--t2);margin-top:3px">Mode & Vêtements • Yaoundé</div>
+      <div style="font-size:12px;font-weight:700;padding:4px 12px;border-radius:10px;background:var(--gd);color:var(--g);border:1px solid rgba(22,163,74,.2);display:inline-block;margin-top:6px">⭐ Plan Pro — 40 000 FCFA/mois</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px">
+        <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--g)">240k</div><div style="font-size:10px;color:var(--t3);margin-top:2px">CA ce mois</div></div>
+        <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--g)">18</div><div style="font-size:10px;color:var(--t3);margin-top:2px">Clients</div></div>
+        <div style="background:#fff;border-radius:10px;padding:10px;text-align:center;box-shadow:var(--sh)"><div style="font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--g)">3.8x</div><div style="font-size:10px;color:var(--t3);margin-top:2px">ROI</div></div>
+      </div>
+    </div>
+    <div class="sttl">⚙️ Paramètres</div>
+    <div class="scard">
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">🤖</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Réponses automatiques</div></div><div class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">🔔</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Notifications WhatsApp</div></div><div class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">🌙</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Mode nuit (20h-7h)</div></div><div class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">🔄</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Relances automatiques</div></div><div class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></div></div>
+    </div>
+    <div class="sttl">📱 Plateformes</div>
+    <div class="scard">
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">📘</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Facebook</div><div style="font-size:11px;color:var(--g)">● Connecté</div></div><div style="font-size:13px;color:var(--t3)">→</div></div>
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">💬</div><div style="flex:1"><div style="font-size:13px;font-weight:600">WhatsApp Business</div><div style="font-size:11px;color:var(--g)">● Connecté</div></div><div style="font-size:13px;color:var(--t3)">→</div></div>
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">📸</div><div style="flex:1"><div style="font-size:13px;font-weight:600">Instagram</div><div style="font-size:11px;color:var(--o)">⏳ En attente</div></div><div style="font-size:13px;color:var(--t3)">→</div></div>
+    </div>
+    <div class="scard" style="margin-top:6px">
+      <div class="si"><div style="font-size:18px;width:28px;text-align:center">🚪</div><div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--r)">Se déconnecter</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="bni on" id="bni-home" onclick="gNav('pg-home','bni-home')"><div class="bni-i">🌐</div><div class="bni-l">Site</div></div>
+  <div class="bni" id="bni-app" onclick="gNav('pg-app','bni-app')"><div class="bni-i">🏠</div><div class="bni-l">Accueil</div></div>
+  <div class="bni" id="bni-chat" onclick="gNav('pg-chat','bni-chat')"><div class="bni-i">💬</div><div class="bni-l">Chat</div><div class="bni-b">3</div></div>
+  <div class="bni" id="bni-pub" onclick="gNav('pg-pub','bni-pub')"><div class="bni-i">📝</div><div class="bni-l">Posts</div></div>
+  <div class="bni" id="bni-ads" onclick="gNav('pg-ads','bni-ads')"><div class="bni-i">📣</div><div class="bni-l">Pubs</div></div>
+  <div class="bni" id="bni-crm" onclick="gNav('pg-crm','bni-crm')"><div class="bni-i">👥</div><div class="bni-l">CRM</div><div class="bni-b">3</div></div>
+  <div class="bni" id="bni-notif" onclick="gNav('pg-notif','bni-notif')"><div class="bni-i">🔔</div><div class="bni-l">Alertes</div><div class="bni-b">2</div></div>
+  <div class="bni" id="bni-prof" onclick="gNav('pg-prof','bni-prof')"><div class="bni-i">⚙️</div><div class="bni-l">Profil</div></div>
 </div>
 
 <!-- MODAL INSCRIPTION -->
-<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title">🚀 Démarrer l'essai gratuit</div>
-    <div class="modal-sub" id="modal-sub">30 jours gratuits — sans carte bancaire</div>
-    <div class="mfield"><label class="mlabel">Votre prénom *</label><input class="minput" id="f-prenom" placeholder="Ex: Marie"></div>
-    <div class="mfield"><label class="mlabel">Nom de votre entreprise *</label><input class="minput" id="f-entreprise" placeholder="Ex: Boutique Mode Élégance"></div>
-    <div class="mfield"><label class="mlabel">Secteur d'activité</label><select class="minput" id="f-secteur"><option>Mode & Vêtements</option><option>Beauté & Cosmétiques</option><option>Salon de Coiffure</option><option>Restaurant & Pâtisserie</option><option>Téléphones & Accessoires</option><option>E-commerce Local</option><option>Autre</option></select></div>
-    <div class="mfield"><label class="mlabel">Numéro WhatsApp *</label><input class="minput" id="f-phone" placeholder="+237 6XX XXX XXX" type="tel"></div>
-    <button class="mbtn" onclick="submitForm()">✅ Démarrer mon essai gratuit</button>
+<div class="mov" id="mod" onclick="if(event.target===this)cMod()">
+  <div class="mod">
+    <div class="mh"></div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:5px">🚀 Démarrer l'essai gratuit</div>
+    <div style="font-size:13px;color:var(--t2);margin-bottom:16px" id="mod-sub">30 jours gratuits — sans carte bancaire</div>
+    <div class="mf"><label class="ml">Votre prénom *</label><input class="mi" id="f1" placeholder="Ex: Marie"></div>
+    <div class="mf"><label class="ml">Nom de votre entreprise *</label><input class="mi" id="f2" placeholder="Ex: Boutique Mode Élégance"></div>
+    <div class="mf"><label class="ml">Secteur d'activité</label><select class="mi"><option>Mode & Vêtements</option><option>Beauté & Cosmétiques</option><option>Salon de Coiffure</option><option>Restaurant & Pâtisserie</option><option>Téléphones & Accessoires</option><option>E-commerce Local</option><option>Autre</option></select></div>
+    <div class="mf"><label class="ml">Numéro WhatsApp *</label><input class="mi" id="f3" placeholder="+237 6XX XXX XXX" type="tel"></div>
+    <button class="mbtn" onclick="subForm()">✅ Démarrer mon essai gratuit</button>
   </div>
 </div>
 
 <!-- MODAL SUCCÈS -->
-<div class="modal-overlay" id="modal-success" onclick="if(event.target===this)closeSuccess()">
-  <div class="modal" style="text-align:center">
-    <div class="modal-handle"></div>
-    <div style="font-size:60px;margin-bottom:16px">🎉</div>
-    <div class="modal-title">Bienvenue chez GrowthAI Africa !</div>
-    <div style="font-size:13px;color:var(--text2);margin:10px 0 20px;line-height:1.7">Votre essai gratuit de 30 jours est confirmé. Notre équipe vous contactera sur WhatsApp dans les prochaines heures.</div>
-    <div style="background:var(--green-dim);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left">
-      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:8px">📋 Prochaines étapes :</div>
-      <div style="font-size:12px;color:var(--text2);display:flex;flex-direction:column;gap:6px">
-        <div>✅ Confirmation reçue</div>
-        <div>⏳ Appel WhatsApp dans 24h</div>
-        <div>⏳ Activation sous 48h</div>
-        <div>⏳ Premiers résultats dès la semaine 1</div>
-      </div>
+<div class="mov" id="mod-ok" onclick="if(event.target===this)cOk()">
+  <div class="mod" style="text-align:center">
+    <div class="mh"></div>
+    <div style="font-size:56px;margin-bottom:14px">🎉</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800;margin-bottom:8px">Bienvenue chez GrowthAI Africa !</div>
+    <div style="font-size:13px;color:var(--t2);margin-bottom:18px;line-height:1.7">Votre essai gratuit est confirmé. Notre équipe vous contactera sur WhatsApp dans les prochaines heures.</div>
+    <div style="background:var(--gd);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left">
+      <div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:8px">📋 Prochaines étapes :</div>
+      <div style="font-size:12px;color:var(--t2);line-height:2">✅ Confirmation reçue<br>⏳ Appel WhatsApp dans 24h<br>⏳ Activation sous 48h<br>⏳ Premiers résultats semaine 1</div>
     </div>
-    <button class="btn-green" onclick="closeSuccess()">Parfait, j'attends ! 😊</button>
+    <button class="btn-g" onclick="cOk()">Parfait, j'attends ! 😊</button>
   </div>
 </div>
 
 <script>
-// STICKY
-window.addEventListener('scroll',()=>{document.getElementById('sticky').classList.toggle('show',window.scrollY>600);});
-
-// FAQ
-function toggleFaq(item){
-  const a=item.querySelector('.faq-a');const isOpen=a.classList.contains('open');
-  document.querySelectorAll('.faq-a').forEach(x=>x.classList.remove('open'));
-  document.querySelectorAll('.faq-item').forEach(x=>x.classList.remove('open'));
-  if(!isOpen){a.classList.add('open');item.classList.add('open');}
+// NAVIGATION
+function gNav(pgId,bniId){
+  document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.bni').forEach(b=>b.classList.remove('on'));
+  document.getElementById(pgId).classList.add('on');
+  const b=document.getElementById(bniId);if(b)b.classList.add('on');
+  window.scrollTo(0,0);
 }
 
-// MODAL
-function openModal(plan=''){
-  if(plan)document.getElementById('modal-sub').textContent=`Plan ${plan} — 30 jours gratuits`;
-  document.getElementById('modal').classList.add('open');
-}
-function closeModal(){document.getElementById('modal').classList.remove('open');}
-function closeSuccess(){document.getElementById('modal-success').classList.remove('open');}
-
-function submitForm(){
-  const prenom=document.getElementById('f-prenom').value.trim();
-  const entreprise=document.getElementById('f-entreprise').value.trim();
-  const phone=document.getElementById('f-phone').value.trim();
-  if(!prenom||!entreprise||!phone){alert('Veuillez remplir tous les champs obligatoires !');return;}
-  closeModal();
-  document.getElementById('modal-success').classList.add('open');
+// INNER TABS
+function iTab(id,el){
+  const pg=el.closest('.pg');
+  pg.querySelectorAll('.itab').forEach(t=>t.classList.remove('on'));
+  pg.querySelectorAll('.ipane').forEach(p=>p.classList.remove('on'));
+  document.getElementById(id).classList.add('on');el.classList.add('on');
 }
 
-function contactWA(){
-  const msg=encodeURIComponent("Bonjour GrowthAI Africa ! Je veux tester gratuitement pendant 30 jours. Pouvez-vous me contacter ?");
-  window.open(`https://wa.me/237678658152?text=${msg}`,'_blank');
+// CHAT ENGINE
+const CM={
+  greeting:{fr:["Bonjour 😊 comment je peux vous aider ?","Salut 👋 vous cherchez quelque chose ?"],en:["Hello 😊 how can I help you?","Hi 👋 what are you looking for?"],mix:["Hello 😊 comment puis-je vous aider today?"]},
+  qualification:{fr:["C'est pour quel usage exactement ?","Vous cherchez quel type précisément ?","Dites-moi plus 😊"],en:["What exactly are you looking for?","Tell me more 😊"],mix:["Tell me more, qu'est-ce qu'il vous faut?"]},
+  product_pitch:{fr:["On a exactement ce qu'il vous faut 🔥","Bonne nouvelle — on a ça en stock ! 🎉"],en:["We have exactly what you need 🔥","Good news — in stock! 🎉"],mix:["On a exactly what you need 🔥"]},
+  closing:{fr:["Le prix commence à 15 000 FCFA 😊 On valide ?","Entre 15 000 et 80 000 FCFA. Je vous réserve ?"],en:["Starting from 15,000 FCFA 😊 Shall I confirm?"],mix:["From 15,000 FCFA 😊 On valide?"]},
+  delivery:{fr:["Livraison Yaoundé sous 24h 🚚 Livraison gratuite !"],en:["Delivery within 24h 🚚 Free!"],mix:["Livraison within 24h 🚚 Free!"]},
+  payment:{fr:["Paiement MTN Money ou Orange Money 📱"],en:["Payment via MTN or Orange Money 📱"],mix:["Payment MTN ou Orange Money 📱"]},
+  follow_up:{fr:["Vous êtes toujours intéressé(e) ? 😊","Offre spéciale 🎁 -10% maintenant !"],en:["Still interested? 😊","Special offer 🎁 -10% now!"],mix:["Still interested? Offre spéciale 🎁"]},
+  not_understood:{fr:["Désolé, je n'ai pas compris 😅 Reformulez ?"],en:["Sorry 😅 Can you rephrase?"],mix:["Sorry 😅 je n'ai pas compris."]}
+};
+const CS={fr:["tranquille 😄","on gère ça"],en:["no worries 😄","we got you"],mix:["no worry 😄","on gère ça"]};
+let cst={language:"fr",stage:"greeting",score:0,lead_status:"COLD"};
+
+function rnd(a){return a[Math.floor(Math.random()*a.length)];}
+function dL(m){
+  m=m.toLowerCase();
+  const en=["hello","hi","price","buy","need","how much","i want","i need","looking","delivery"];
+  const fr=["bonjour","salut","prix","acheter","besoin","cherche","je veux","livraison","combien"];
+  let es=0,fs=0;en.forEach(w=>{if(m.includes(w))es++;});fr.forEach(w=>{if(m.includes(w))fs++;});
+  if(es>fs)return"en";if(fs>es)return"fr";if(es>0&&fs>0)return"mix";return"fr";
 }
+function dI(m){
+  m=m.toLowerCase();
+  if(["prix","price","combien","how much"].some(w=>m.includes(w)))return"closing";
+  if(["acheter","buy","commander","je prends","valider"].some(w=>m.includes(w)))return"closing";
+  if(["livraison","delivery","yaoundé","douala"].some(w=>m.includes(w)))return"delivery";
+  if(["mtn","orange money","wave","payer"].some(w=>m.includes(w)))return"payment";
+  if(["cherche","need","looking","veux","want","besoin","vous avez"].some(w=>m.includes(w)))return"qualification";
+  if(["bonjour","hello","hi","salut"].some(w=>m.includes(w)))return"greeting";
+  return"not_understood";
+}
+function cSc(m){
+  m=m.toLowerCase();let s=0;
+  ["je cherche","je veux","i need","i want","looking for","besoin"].forEach(w=>{if(m.includes(w))s+=5;});
+  ["robe","chaussure","perruque","sac","téléphone","dress","shoes","wig","bag","phone"].forEach(w=>{if(m.includes(w))s+=3;});
+  ["urgent","vite","today","aujourd'hui","maintenant"].forEach(w=>{if(m.includes(w))s+=2;});
+  ["yaoundé","douala","livraison","delivery"].forEach(w=>{if(m.includes(w))s+=2;});
+  ["prix","price","combien","how much"].forEach(w=>{if(m.includes(w))s+=1;});
+  return s;
+}
+const FL={greeting:"qualification",qualification:"product_pitch",product_pitch:"closing",closing:"delivery",delivery:"payment",payment:"follow_up",follow_up:"follow_up",not_understood:"not_understood"};
+
+function pChat(msg){
+  const lang=dL(msg);const intent=dI(msg);
+  const nsc=cst.score+cSc(msg);
+  const ls=nsc>=8?"HOT":nsc>=5?"WARM":"COLD";
+  const nxt=intent!=="not_understood"?(FL[intent]||FL[cst.stage]):"not_understood";
+  const pool=CM[nxt]?.[lang]||CM[nxt]?.fr||["Je suis là 😊"];
+  let reply=rnd(pool);
+  if(Math.random()>.5&&CS[lang])reply+=" "+rnd(CS[lang]);
+  cst={...cst,language:lang,stage:nxt,score:nsc,lead_status:ls};
+  return reply;
+}
+
+function addCMsg(txt,type){
+  const area=document.getElementById("carea");
+  const tw=document.getElementById("tw");
+  const w=document.createElement("div");
+  w.className=`bbl ${type==="bot"?"":"out"}`;
+  const b=document.createElement("div");
+  b.className=`bb ${type==="bot"?"bb-in":"bb-out"}`;
+  if(type==="bot"){const l=document.createElement("div");l.className="ai-lbl";l.textContent="🤖 GrowthAI Africa";b.appendChild(l);}
+  const p=document.createElement("p");p.textContent=txt;b.appendChild(p);
+  const t=document.createElement("div");t.className="mt";
+  t.textContent=new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
+  if(type!=="bot"){const tk=document.createElement("span");tk.className="tick";tk.textContent=" ✓✓";t.appendChild(tk);}
+  b.appendChild(t);w.appendChild(b);
+  area.insertBefore(w,tw);area.scrollTop=area.scrollHeight;
+}
+
+function updUI(){
+  const bdg=document.getElementById("cbdg");
+  const nb=document.getElementById("cnb");
+  const st=document.getElementById("cst");
+  bdg.textContent=`Score: ${cst.score} — ${cst.lead_status}`;
+  bdg.style.background=cst.lead_status==="HOT"?"rgba(220,38,38,.3)":cst.lead_status==="WARM"?"rgba(217,119,6,.3)":"rgba(255,255,255,.15)";
+  if(cst.lead_status==="HOT"){nb.style.display="block";st.textContent="🔴 Prospect chaud — Commercial notifié !";setTimeout(()=>{nb.style.display="none";},5000);}
+  else if(cst.lead_status==="WARM"){st.textContent="🟡 Prospect tiède — Relance dans 6h";}
+}
+
+window.sendChat=function(){
+  const inp=document.getElementById("cin");
+  const txt=inp.value.trim();if(!txt)return;
+  addCMsg(txt,"user");inp.value="";inp.style.height="auto";
+  const tw=document.getElementById("tw");
+  tw.style.display="flex";document.getElementById("carea").scrollTop=9999;
+  setTimeout(()=>{tw.style.display="none";addCMsg(pChat(txt),"bot");updUI();},800+Math.random()*700);
+};
+window.sendQ=function(t){document.getElementById("cin").value=t;sendChat();};
 
 // SIMULATION
-const scenarios={
-  hot1:{score:12,level:"HOT",tags:["intent +5","produit +3","urgence +2","location +2"],reply:"On a exactement ce qu'il vous faut 🔥 Robes taille M : 25 000 – 45 000 FCFA. Livraison gratuite à Yaoundé sous 24h ! On valide la commande ? 😊",notif:true},
-  hot2:{score:10,level:"HOT",tags:["intent +5","produit +3","urgence +2"],reply:"We have exactly what you need 🔥 Wigs from 15,000 FCFA. Free delivery in Yaounde within 24h! Should I confirm your order? 😊",notif:true},
-  warm1:{score:7,level:"WARM",tags:["intent +5","location +2"],reply:"Bonjour 😊 Oui, nous livrons dans toute la ville ! Qu'est-ce que vous souhaitez commander ? Envoyez-nous votre commande 🍽️",notif:false},
-  warm2:{score:6,level:"WARM",tags:["produit +3","prix +1","intent +2"],reply:"Le Samsung S24 est disponible ! À partir de 350 000 FCFA, neuf avec garantie 📱 Vous souhaitez plus d'infos ?",notif:false},
-  cold1:{score:0,level:"COLD",tags:["salutation"],reply:"Bonjour 😊 Bienvenue ! Comment puis-je vous aider aujourd'hui ? Je suis là pour répondre à toutes vos questions.",notif:false}
+const SIM={
+  h1:{score:12,level:"HOT",tags:["intent +5","produit +3","urgence +2","location +2"],reply:"On a exactement ce qu'il vous faut 🔥 Robes taille M : 25 000–45 000 FCFA. Livraison gratuite Yaoundé ! On valide ? 😊",notif:true},
+  h2:{score:10,level:"HOT",tags:["intent +5","produit +3","urgence +2"],reply:"We have exactly what you need 🔥 Wigs from 15,000 FCFA. Free delivery Yaounde! Shall I confirm? 😊",notif:true},
+  w1:{score:7,level:"WARM",tags:["intent +5","location +2"],reply:"Bonjour 😊 Oui, nous livrons dans toute la ville ! Qu'est-ce que vous souhaitez commander ? 🍽️",notif:false},
+  w2:{score:6,level:"WARM",tags:["produit +3","prix +1","intent +2"],reply:"Le Samsung S24 est disponible ! À partir de 350 000 FCFA, neuf avec garantie 📱",notif:false},
+  c1:{score:0,level:"COLD",tags:["salutation"],reply:"Bonjour 😊 Bienvenue chez GrowthAI Africa ! Comment puis-je vous aider aujourd'hui ?",notif:false}
 };
 
-function simulate(btn,key){
-  document.querySelectorAll('.sim-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const s=scenarios[key];
-  const levelColor=s.level==="HOT"?"sb-hot":s.level==="WARM"?"sb-warm":"sb-cold";
-  const levelEmoji=s.level==="HOT"?"🔴":s.level==="WARM"?"🟡":"🔵";
-  document.getElementById('sim-score').innerHTML=`
-    <span class="sim-badge ${levelColor}">${levelEmoji} ${s.level}</span>
-    <span style="font-size:12px;font-weight:700;color:var(--text2)">Score: ${s.score}</span>
-    ${s.tags.map(t=>`<span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--surface2);color:var(--text3)">${t}</span>`).join('')}
-  `;
-  document.getElementById('sim-reply').innerHTML=`<strong>🤖 Réponse automatique :</strong><br><br>${s.reply}`;
-  document.getElementById('sim-notif').style.display=s.notif?'flex':'none';
-  const result=document.getElementById('sim-result');
-  result.classList.add('show');
-  result.scrollIntoView({behavior:'smooth',block:'nearest'});
-}
+window.sim=function(btn,key){
+  document.querySelectorAll('.sim-b').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+  const s=SIM[key];
+  const lc=s.level==="HOT"?"background:var(--rd);color:var(--r)":s.level==="WARM"?"background:var(--od);color:var(--o)":"background:var(--s2);color:var(--t3)";
+  document.getElementById('sim-sc').innerHTML=`<span style="font-size:11px;font-weight:800;padding:3px 12px;border-radius:16px;${lc}">${s.level==="HOT"?"🔴":s.level==="WARM"?"🟡":"🔵"} ${s.level}</span><span style="font-size:12px;font-weight:700;color:var(--t2)">Score: ${s.score}</span>${s.tags.map(t=>`<span style="font-size:10px;padding:2px 8px;border-radius:8px;background:var(--s2);color:var(--t3)">${t}</span>`).join('')}`;
+  document.getElementById('sim-rp').innerHTML=`<strong>🤖 Réponse automatique :</strong><br><br>${s.reply}`;
+  document.getElementById('sim-nt').style.display=s.notif?'flex':'none';
+  const r=document.getElementById('sim-r');r.classList.add('on');r.scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+// FAQ
+window.faq=function(item){
+  const a=item.querySelector('.fqa');const open=a.classList.contains('on');
+  document.querySelectorAll('.fqa').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.fqi').forEach(x=>x.classList.remove('on'));
+  if(!open){a.classList.add('on');item.classList.add('on');}
+};
+
+// MODAL
+window.oMod=function(plan=''){
+  if(plan)document.getElementById('mod-sub').textContent=`Plan ${plan} — 30 jours gratuits`;
+  document.getElementById('mod').classList.add('on');
+};
+window.cMod=function(){document.getElementById('mod').classList.remove('on');};
+window.cOk=function(){document.getElementById('mod-ok').classList.remove('on');};
+window.subForm=function(){
+  const p=document.getElementById('f1').value.trim();
+  const e=document.getElementById('f2').value.trim();
+  const ph=document.getElementById('f3').value.trim();
+  if(!p||!e||!ph){alert('Remplissez tous les champs !');return;}
+  cMod();document.getElementById('mod-ok').classList.add('on');
+};
+
+// PUBLICATIONS
+window.genPost=function(){
+  const btn=document.getElementById('gen-btn');
+  btn.textContent='🤖 Génération...';btn.disabled=true;
+  setTimeout(()=>{btn.textContent='✨ Générer avec l\'IA';btn.disabled=false;document.getElementById('gen-res').style.display='block';},1500);
+};
+
+// WHATSAPP
+window.cWA=function(){
+  const msg=encodeURIComponent("Bonjour GrowthAI Africa ! Je veux tester gratuitement 30 jours.");
+  window.open(`https://wa.me/237678658152?text=${msg}`,'_blank');
+};
+
+// INIT
+setTimeout(()=>{addCMsg("Bonjour 😊 Bienvenue chez GrowthAI Africa ! Comment puis-je vous aider ?","bot");},600);
 </script>
 </body>
 </html>

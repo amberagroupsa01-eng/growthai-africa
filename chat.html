@@ -3,64 +3,71 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GrowthAI Africa — Chat</title>
+<title>GrowthAI Africa — Chat Vendeur IA</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  body{font-family:'Segoe UI',sans-serif;background:#111b21;color:#e9edef;max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+  body{font-family:'Plus Jakarta Sans',sans-serif;background:#f0f2f5;color:#111b21;max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 
-  .wa-header{background:#202c33;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;border-bottom:1px solid #2a3942}
-  .wa-back{font-size:20px;color:#aebac1;cursor:pointer}
-  .wa-avatar{width:40px;height:40px;border-radius:50%;background:#00a884;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  /* HEADER */
+  .wa-header{background:#075e54;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.2)}
+  .wa-back{font-size:20px;color:rgba(255,255,255,0.8);cursor:pointer}
+  .wa-avatar{width:40px;height:40px;border-radius:50%;background:#25d366;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;border:2px solid rgba(255,255,255,0.3)}
   .wa-info{flex:1}
-  .wa-name{font-size:15px;font-weight:600;color:#e9edef}
-  .wa-status{font-size:12px;color:#8696a0;margin-top:1px}
-  .wa-actions{display:flex;gap:20px}
-  .wa-action{font-size:20px;color:#aebac1;cursor:pointer}
+  .wa-name{font-size:15px;font-weight:700;color:white}
+  .wa-status{font-size:12px;color:rgba(255,255,255,0.7);margin-top:1px}
+  .wa-actions{display:flex;gap:18px}
+  .wa-action{font-size:20px;color:rgba(255,255,255,0.8);cursor:pointer}
 
-  .notif-bar{display:none;background:#ff4d4d;color:white;font-size:12px;font-weight:700;padding:6px 16px;text-align:center}
+  /* NOTIF BAR */
+  .notif-bar{display:none;background:#dc2626;color:white;font-size:12px;font-weight:700;padding:7px 16px;text-align:center}
 
-  .chat-bg{flex:1;background:#0b141a;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 130px)}
+  /* SCORE BAR */
+  .score-bar{background:white;border-bottom:1px solid #e9edef;padding:6px 16px;display:flex;align-items:center;justify-content:space-between}
+  .score-label{font-size:11px;color:#667781}
+  .score-badge{font-size:11px;font-weight:800;padding:3px 12px;border-radius:20px;background:#f0f2f5;color:#667781}
+  .score-badge.HOT{background:#fee2e2;color:#dc2626}
+  .score-badge.WARM{background:#fef3c7;color:#d97706}
+
+  /* CHAT AREA */
+  .chat-area{flex:1;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:3px;max-height:calc(100vh - 175px);background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAABmJLR0QA/wD/AP+gvaeTAAAAJ0lEQVRoge3BMQEAAADCoPVP7WsIoAAAAAAAAAAAAAAAAAAAeDMB/AABHAABAtPNSwAAAABJRU5ErkJggg==");background-color:#e5ddd5}
 
   .date-badge{text-align:center;margin:8px 0}
-  .date-badge span{background:#182229;color:#8696a0;font-size:11.5px;padding:5px 12px;border-radius:8px;display:inline-block}
+  .date-badge span{background:white;color:#667781;font-size:11.5px;padding:5px 12px;border-radius:8px;display:inline-block;box-shadow:0 1px 2px rgba(0,0,0,0.1)}
 
-  .msg-wrap{display:flex;margin-bottom:2px}
-  .msg-wrap.incoming{justify-content:flex-start}
-  .msg-wrap.outgoing{justify-content:flex-end}
+  .msg-wrap{display:flex;margin-bottom:1px}
+  .msg-wrap.in{justify-content:flex-start}
+  .msg-wrap.out{justify-content:flex-end}
 
-  .bubble{max-width:75%;padding:6px 9px 8px;border-radius:8px;font-size:14px;line-height:1.5;position:relative}
-  .bubble-in{background:#202c33;border-radius:0 8px 8px 8px;color:#e9edef}
-  .bubble-out{background:#005c4b;border-radius:8px 8px 0 8px;color:#e9edef}
-
-  .bot-name{font-size:12px;font-weight:600;color:#00a884;margin-bottom:3px}
+  .bubble{max-width:78%;padding:6px 10px 8px;border-radius:8px;position:relative;font-size:14px;line-height:1.5;box-shadow:0 1px 2px rgba(0,0,0,0.13)}
+  .bubble-in{background:white;border-radius:0 8px 8px 8px;color:#111b21}
+  .bubble-out{background:#dcf8c6;border-radius:8px 8px 0 8px;color:#111b21}
+  .bot-name{font-size:12px;font-weight:700;color:#075e54;margin-bottom:3px}
   .msg-meta{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:2px}
-  .msg-time{font-size:11px;color:#8696a0}
-  .msg-tick{font-size:13px;color:#53bdeb}
+  .msg-time{font-size:11px;color:#667781}
+  .msg-tick{font-size:12px;color:#53bdeb}
 
+  /* TYPING */
   .typing-wrap{display:none;margin-bottom:4px}
-  .typing-bubble{background:#202c33;border-radius:0 8px 8px 8px;padding:12px 16px;display:inline-flex;align-items:center;gap:4px}
-  .typing-dot{width:8px;height:8px;background:#8696a0;border-radius:50%;animation:typing 1.4s ease-in-out infinite}
+  .typing-bubble{background:white;border-radius:0 8px 8px 8px;padding:12px 16px;display:inline-flex;align-items:center;gap:4px;box-shadow:0 1px 2px rgba(0,0,0,0.13)}
+  .typing-dot{width:8px;height:8px;background:#aaa;border-radius:50%;animation:typing 1.4s ease-in-out infinite}
   .typing-dot:nth-child(2){animation-delay:0.2s}
   .typing-dot:nth-child(3){animation-delay:0.4s}
-  @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-6px);opacity:1}}
+  @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-5px);opacity:1}}
 
-  .score-wrap{background:#202c33;border-bottom:1px solid #2a3942;padding:4px 16px;display:flex;justify-content:flex-end}
-  .score-badge{font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px;background:#2a3942;color:#8696a0}
-  .score-badge.HOT{background:rgba(255,77,77,0.15);color:#ff4d4d}
-  .score-badge.WARM{background:rgba(245,166,35,0.15);color:#f5a623}
-  .score-badge.COLD{color:#8696a0}
-
-  .quick-replies{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px 4px;background:#111b21;overflow-x:auto;scrollbar-width:none}
+  /* QUICK REPLIES */
+  .quick-replies{display:flex;gap:6px;padding:8px 16px 4px;background:#f0f2f5;overflow-x:auto;scrollbar-width:none;border-top:1px solid #e9edef}
   .quick-replies::-webkit-scrollbar{display:none}
-  .qr{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#202c33;border:1px solid #2a3942;color:#00a884;cursor:pointer;white-space:nowrap;flex-shrink:0}
-  .qr:hover{background:#2a3942}
+  .qr{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:white;border:1px solid #e9edef;color:#075e54;cursor:pointer;white-space:nowrap;flex-shrink:0;box-shadow:0 1px 2px rgba(0,0,0,0.08)}
+  .qr:hover{background:#f0f2f5}
 
-  .wa-input-wrap{background:#111b21;padding:8px 10px 16px;display:flex;align-items:flex-end;gap:8px}
-  .emoji-btn{width:42px;height:42px;border-radius:50%;background:none;border:none;font-size:22px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
-  #user-input{flex:1;background:#2a3942;border:none;border-radius:22px;padding:10px 16px;font-size:15px;color:#e9edef;font-family:'Segoe UI',sans-serif;outline:none;resize:none;min-height:42px;max-height:120px;line-height:1.5}
+  /* INPUT */
+  .wa-input-wrap{background:#f0f2f5;padding:8px 10px 16px;display:flex;align-items:flex-end;gap:8px}
+  .emoji-btn{width:42px;height:42px;border-radius:50%;background:none;border:none;font-size:22px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#54656f}
+  #user-input{flex:1;background:white;border:none;border-radius:22px;padding:11px 16px;font-size:15px;color:#111b21;font-family:'Plus Jakarta Sans',sans-serif;outline:none;resize:none;min-height:42px;max-height:120px;line-height:1.5;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
   #user-input::placeholder{color:#8696a0}
-  #send-btn{width:42px;height:42px;border-radius:50%;background:#00a884;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;color:white;transition:background 0.2s}
-  #send-btn:hover{background:#017561}
+  #send-btn{width:42px;height:42px;border-radius:50%;background:#075e54;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;color:white;box-shadow:0 2px 6px rgba(7,94,84,0.4);transition:background 0.2s}
+  #send-btn:hover{background:#054d45}
 </style>
 </head>
 <body>
@@ -70,7 +77,7 @@
   <div class="wa-avatar">🤖</div>
   <div class="wa-info">
     <div class="wa-name">GrowthAI Africa</div>
-    <div class="wa-status" id="wa-status">● En ligne</div>
+    <div class="wa-status" id="wa-status">● En ligne — répond en moins de 2 min</div>
   </div>
   <div class="wa-actions">
     <div class="wa-action">📞</div>
@@ -80,11 +87,12 @@
 
 <div class="notif-bar" id="notif-bar">🔴 Prospect CHAUD ! Commercial notifié sur WhatsApp</div>
 
-<div class="score-wrap">
-  <div class="score-badge COLD" id="score-badge">Score: 0 — COLD</div>
+<div class="score-bar">
+  <div class="score-label">Score prospect</div>
+  <div class="score-badge" id="score-badge">Score: 0 — COLD</div>
 </div>
 
-<div class="chat-bg" id="chat-area">
+<div class="chat-area" id="chat-area">
   <div class="date-badge"><span>Aujourd'hui</span></div>
   <div class="typing-wrap" id="typing-wrap">
     <div class="typing-bubble">
@@ -101,7 +109,7 @@
   <div class="qr" onclick="sendQuick('C\'est combien ?')">💰 Prix ?</div>
   <div class="qr" onclick="sendQuick('Vous livrez à Yaoundé ?')">🚚 Livraison ?</div>
   <div class="qr" onclick="sendQuick('Je veux commander')">🛒 Commander</div>
-  <div class="qr" onclick="sendQuick('I need a wig urgent')">🔴 Test HOT</div>
+  <div class="qr" onclick="sendQuick('I need a wig urgent Yaoundé')">🔴 Test HOT</div>
 </div>
 
 <div class="wa-input-wrap">
@@ -111,15 +119,15 @@
 </div>
 
 <script>
-const msgs = {
-  greeting:{fr:["Bonjour 😊 comment je peux vous aider ?","Salut 👋 vous cherchez quelque chose ?"],en:["Hello 😊 how can I help you?","Hi 👋 what are you looking for?"],mix:["Hello 😊 comment je peux vous aider today?"]},
-  qualification:{fr:["C'est pour quel usage exactement ?","Vous cherchez quel type précisément ?","Dites-moi plus 😊"],en:["What exactly are you looking for?","Tell me more 😊"],mix:["Tell me more, qu'est-ce qu'il vous faut?"]},
-  product_pitch:{fr:["On a exactement ce qu'il vous faut 🔥","Bonne nouvelle — on a ça en stock ! 🎉"],en:["We have exactly what you need 🔥","Good news — we have it in stock! 🎉"],mix:["On a exactly what you need 🔥"]},
-  closing:{fr:["Le prix commence à 15 000 FCFA 😊 On valide ?","Entre 15 000 et 80 000 FCFA. Je vous réserve ça ?"],en:["Starting from 15,000 FCFA 😊 Shall I confirm?"],mix:["Starting from 15,000 FCFA 😊 On valide?"]},
-  delivery:{fr:["On livre à Yaoundé sous 24h 🚚 Livraison gratuite !","Livraison Yaoundé et Douala — sous 24h ⚡"],en:["Delivery to Yaounde within 24h 🚚 Free!"],mix:["On livre à Yaoundé within 24h 🚚 Free!"]},
-  payment:{fr:["Paiement MTN Money ou Orange Money 📱","On accepte MTN, Orange et Wave 😊"],en:["Payment via MTN Money or Orange Money 📱"],mix:["Payment MTN ou Orange Money 📱"]},
-  follow_up:{fr:["Vous êtes toujours intéressé(e) ? 😊","Offre spéciale aujourd'hui 🎁 -10% !"],en:["Still interested? 😊","Special offer today 🎁 -10%!"],mix:["Still interested? Offre spéciale 🎁 -10%!"]},
-  not_understood:{fr:["Désolé, je n'ai pas compris 😅 Reformulez svp ?"],en:["Sorry, didn't get that 😅 Can you rephrase?"],mix:["Sorry 😅 je n'ai pas compris. Rephrase?"]}
+const msgs={
+  greeting:{fr:["Bonjour 😊 comment je peux vous aider ?","Salut 👋 vous cherchez quelque chose ?"],en:["Hello 😊 how can I help you?","Hi 👋 what are you looking for?"],mix:["Hello 😊 comment puis-je vous aider today?"]},
+  qualification:{fr:["C'est pour quel usage exactement ?","Vous cherchez quel type précisément ?","Dites-moi plus 😊 je vais trouver ce qu'il vous faut"],en:["What exactly are you looking for?","Tell me more 😊"],mix:["Tell me more, qu'est-ce qu'il vous faut?"]},
+  product_pitch:{fr:["On a exactement ce qu'il vous faut 🔥","Bonne nouvelle — on a ça en stock ! 🎉","Parfait ! J'ai quelque chose de très bien pour vous 😊"],en:["We have exactly what you need 🔥","Good news — we have it in stock! 🎉"],mix:["On a exactly what you need 🔥"]},
+  closing:{fr:["Le prix commence à 15 000 FCFA 😊 On valide la commande ?","Entre 15 000 et 80 000 FCFA. Je vous réserve ça maintenant ?"],en:["Starting from 15,000 FCFA 😊 Shall I confirm?"],mix:["Starting from 15,000 FCFA 😊 On valide?"]},
+  delivery:{fr:["On livre à Yaoundé sous 24h 🚚 Livraison gratuite !","Livraison Yaoundé et Douala — sous 24h ⚡"],en:["Delivery to Yaounde within 24h 🚚 Free!"],mix:["On livre within 24h 🚚 Free!"]},
+  payment:{fr:["Paiement MTN Money ou Orange Money 📱 Simple et rapide !","On accepte MTN, Orange et Wave 😊"],en:["Payment via MTN or Orange Money 📱"],mix:["Payment MTN ou Orange Money 📱"]},
+  follow_up:{fr:["Vous êtes toujours intéressé(e) ? 😊","Offre spéciale aujourd'hui 🎁 -10% si vous commandez maintenant !"],en:["Still interested? 😊","Special offer today 🎁 -10%!"],mix:["Still interested? Offre spéciale 🎁 -10%!"]},
+  not_understood:{fr:["Désolé, je n'ai pas compris 😅 Pouvez-vous reformuler ?","Hmm, dites-moi exactement ce que vous cherchez 😊"],en:["Sorry, didn't get that 😅 Can you rephrase?"],mix:["Sorry 😅 je n'ai pas compris. Rephrase?"]}
 };
 const styles={fr:["tranquille 😄","on gère ça","pas de stress 👌"],en:["no worries 😄","we got you","it's all good 👌"],mix:["no worry 😄","on gère ça","we handle it 👌"]};
 let state={language:"fr",stage:"greeting",score:0,lead_status:"COLD"};
@@ -172,7 +180,7 @@ function addMsg(text,type){
   const area=document.getElementById("chat-area");
   const tw=document.getElementById("typing-wrap");
   const wrap=document.createElement("div");
-  wrap.className=`msg-wrap ${type==="bot"?"incoming":"outgoing"}`;
+  wrap.className=`msg-wrap ${type==="bot"?"in":"out"}`;
   const bubble=document.createElement("div");
   bubble.className=`bubble bubble-${type==="bot"?"in":"out"}`;
   if(type==="bot"){const n=document.createElement("div");n.className="bot-name";n.textContent="🤖 GrowthAI Africa";bubble.appendChild(n);}
@@ -193,11 +201,9 @@ function updateUI(){
   if(state.lead_status==="HOT"){
     notif.style.display="block";
     status.textContent="🔴 Prospect chaud — Commercial notifié !";
-    status.style.color="#ff4d4d";
     setTimeout(()=>{notif.style.display="none";},5000);
   }else if(state.lead_status==="WARM"){
     status.textContent="🟡 Prospect tiède — Relance dans 6h";
-    status.style.color="#f5a623";
   }
 }
 
@@ -220,7 +226,6 @@ window.sendMessage=function(){
 window.sendQuick=function(text){document.getElementById("user-input").value=text;window.sendMessage();};
 window.handleKey=function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();window.sendMessage();}};
 window.autoResize=function(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px";};
-
 setTimeout(()=>{addMsg("Bonjour 😊 Bienvenue chez GrowthAI Africa ! Comment puis-je vous aider aujourd'hui ?","bot");},600);
 </script>
 </body>

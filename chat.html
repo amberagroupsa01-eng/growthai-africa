@@ -3,283 +3,225 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GrowthAI Africa — Chat Engine</title>
+<title>GrowthAI Africa — Chat</title>
 <style>
-  :root {
-    --bg:#0a0e0b; --surface:#141c15; --surface2:#1a241b;
-    --border:#1f2d20; --border2:#253026;
-    --green:#2dce6a; --green2:#1a9447; --green-dim:rgba(45,206,106,0.1);
-    --text:#e8f0e9; --text2:#8fa990; --text3:#4a5e4b;
-  }
-  *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text);max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Segoe UI',sans-serif;background:#111b21;color:#e9edef;max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
 
-  .header{background:rgba(10,14,11,0.97);border-bottom:1px solid var(--border);padding:14px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100}
-  .header-av{width:40px;height:40px;border-radius:50%;background:var(--green-dim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:2px solid var(--green)}
-  .header-name{font-size:14px;font-weight:700}
-  .header-status{font-size:11px;color:var(--green)}
-  .header-score{margin-left:auto;font-size:11px;font-weight:800;padding:4px 10px;border-radius:10px;background:var(--surface);border:1px solid var(--border2)}
+  .wa-header{background:#202c33;padding:10px 16px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;border-bottom:1px solid #2a3942}
+  .wa-back{font-size:20px;color:#aebac1;cursor:pointer}
+  .wa-avatar{width:40px;height:40px;border-radius:50%;background:#00a884;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+  .wa-info{flex:1}
+  .wa-name{font-size:15px;font-weight:600;color:#e9edef}
+  .wa-status{font-size:12px;color:#8696a0;margin-top:1px}
+  .wa-actions{display:flex;gap:20px}
+  .wa-action{font-size:20px;color:#aebac1;cursor:pointer}
 
-  #chat-area{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;min-height:0;max-height:calc(100vh - 160px)}
+  .notif-bar{display:none;background:#ff4d4d;color:white;font-size:12px;font-weight:700;padding:6px 16px;text-align:center}
 
-  .message-wrap{display:flex;flex-direction:column}
-  .message-wrap.user{align-items:flex-end}
-  .message-wrap.bot{align-items:flex-start}
+  .chat-bg{flex:1;background:#0b141a;overflow-y:auto;padding:10px 16px;display:flex;flex-direction:column;gap:2px;max-height:calc(100vh - 130px)}
 
-  .bubble{max-width:80%;padding:10px 13px;border-radius:16px;font-size:13px;line-height:1.6}
-  .bubble-bot{background:rgba(45,206,106,0.1);border:1px solid rgba(45,206,106,0.2);border-radius:4px 16px 16px 16px}
-  .bubble-user{background:var(--green2);border-radius:16px 4px 16px 16px;color:white}
-  .bot-label{font-size:9px;color:var(--green);font-weight:800;margin-bottom:4px}
-  .msg-time{font-size:9px;color:var(--text3);margin-top:4px;text-align:right}
+  .date-badge{text-align:center;margin:8px 0}
+  .date-badge span{background:#182229;color:#8696a0;font-size:11.5px;padding:5px 12px;border-radius:8px;display:inline-block}
 
-  .typing{display:none;align-items:center;gap:4px;padding:10px 14px;background:rgba(45,206,106,0.08);border:1px solid rgba(45,206,106,0.15);border-radius:4px 16px 16px 16px;width:fit-content}
-  .typing-dot{width:6px;height:6px;background:var(--text3);border-radius:50%;animation:typing 1.2s ease-in-out infinite}
+  .msg-wrap{display:flex;margin-bottom:2px}
+  .msg-wrap.incoming{justify-content:flex-start}
+  .msg-wrap.outgoing{justify-content:flex-end}
+
+  .bubble{max-width:75%;padding:6px 9px 8px;border-radius:8px;font-size:14px;line-height:1.5;position:relative}
+  .bubble-in{background:#202c33;border-radius:0 8px 8px 8px;color:#e9edef}
+  .bubble-out{background:#005c4b;border-radius:8px 8px 0 8px;color:#e9edef}
+
+  .bot-name{font-size:12px;font-weight:600;color:#00a884;margin-bottom:3px}
+  .msg-meta{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:2px}
+  .msg-time{font-size:11px;color:#8696a0}
+  .msg-tick{font-size:13px;color:#53bdeb}
+
+  .typing-wrap{display:none;margin-bottom:4px}
+  .typing-bubble{background:#202c33;border-radius:0 8px 8px 8px;padding:12px 16px;display:inline-flex;align-items:center;gap:4px}
+  .typing-dot{width:8px;height:8px;background:#8696a0;border-radius:50%;animation:typing 1.4s ease-in-out infinite}
   .typing-dot:nth-child(2){animation-delay:0.2s}
   .typing-dot:nth-child(3){animation-delay:0.4s}
-  @keyframes typing{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+  @keyframes typing{0%,60%,100%{transform:translateY(0);opacity:0.4}30%{transform:translateY(-6px);opacity:1}}
 
-  .input-wrap{padding:10px 14px 20px;background:rgba(10,14,11,0.97);border-top:1px solid var(--border)}
-  .lang-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;background:var(--surface);border:1px solid var(--border2);color:var(--text2);margin-bottom:6px;display:inline-block}
-  .input-row{display:flex;gap:8px;align-items:flex-end}
-  #user-input{flex:1;background:var(--surface);border:1px solid var(--border2);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--text);font-family:inherit;outline:none;resize:none;min-height:42px;max-height:100px;transition:border-color 0.2s}
-  #user-input:focus{border-color:var(--green)}
-  #user-input::placeholder{color:var(--text3)}
-  #send-btn{width:42px;height:42px;border-radius:50%;background:var(--green);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;flex-shrink:0;transition:opacity 0.2s}
-  #send-btn:hover{opacity:0.85}
+  .score-wrap{background:#202c33;border-bottom:1px solid #2a3942;padding:4px 16px;display:flex;justify-content:flex-end}
+  .score-badge{font-size:11px;font-weight:700;padding:2px 10px;border-radius:10px;background:#2a3942;color:#8696a0}
+  .score-badge.HOT{background:rgba(255,77,77,0.15);color:#ff4d4d}
+  .score-badge.WARM{background:rgba(245,166,35,0.15);color:#f5a623}
+  .score-badge.COLD{color:#8696a0}
 
-  .quick-replies{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
-  .qr{padding:6px 12px;border-radius:20px;font-size:11px;font-weight:700;background:var(--surface);border:1px solid var(--border2);color:var(--text2);cursor:pointer;transition:all 0.15s;white-space:nowrap}
-  .qr:hover{border-color:var(--green);color:var(--green)}
+  .quick-replies{display:flex;gap:6px;flex-wrap:wrap;padding:8px 16px 4px;background:#111b21;overflow-x:auto;scrollbar-width:none}
+  .quick-replies::-webkit-scrollbar{display:none}
+  .qr{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;background:#202c33;border:1px solid #2a3942;color:#00a884;cursor:pointer;white-space:nowrap;flex-shrink:0}
+  .qr:hover{background:#2a3942}
 
-  .lead-bar{position:fixed;top:68px;left:50%;transform:translateX(-50%);width:100%;max-width:430px;padding:6px 16px;font-size:11px;font-weight:700;text-align:center;display:none;z-index:99}
-  .lead-bar.hot{background:rgba(255,77,77,0.15);border-bottom:1px solid rgba(255,77,77,0.3);color:#ff4d4d}
-  .lead-bar.warm{background:rgba(245,166,35,0.15);border-bottom:1px solid rgba(245,166,35,0.3);color:#f5a623}
+  .wa-input-wrap{background:#111b21;padding:8px 10px 16px;display:flex;align-items:flex-end;gap:8px}
+  .emoji-btn{width:42px;height:42px;border-radius:50%;background:none;border:none;font-size:22px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+  #user-input{flex:1;background:#2a3942;border:none;border-radius:22px;padding:10px 16px;font-size:15px;color:#e9edef;font-family:'Segoe UI',sans-serif;outline:none;resize:none;min-height:42px;max-height:120px;line-height:1.5}
+  #user-input::placeholder{color:#8696a0}
+  #send-btn{width:42px;height:42px;border-radius:50%;background:#00a884;border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;font-size:18px;color:white;transition:background 0.2s}
+  #send-btn:hover{background:#017561}
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-av">🤖</div>
-  <div>
-    <div class="header-name">GrowthAI Africa</div>
-    <div class="header-status">● En ligne — répond en moins de 2 min</div>
+<div class="wa-header">
+  <div class="wa-back">←</div>
+  <div class="wa-avatar">🤖</div>
+  <div class="wa-info">
+    <div class="wa-name">GrowthAI Africa</div>
+    <div class="wa-status" id="wa-status">● En ligne</div>
   </div>
-  <div class="header-score" id="score-badge">Score: 0</div>
-</div>
-
-<div class="lead-bar" id="lead-bar"></div>
-
-<div id="chat-area">
-  <div class="typing" id="typing">
-    <div class="typing-dot"></div>
-    <div class="typing-dot"></div>
-    <div class="typing-dot"></div>
+  <div class="wa-actions">
+    <div class="wa-action">📞</div>
+    <div class="wa-action">⋮</div>
   </div>
 </div>
 
-<div class="input-wrap">
-  <div class="quick-replies" id="quick-replies">
-    <div class="qr" onclick="sendQuick('Je cherche une robe')">👗 Je cherche une robe</div>
-    <div class="qr" onclick="sendQuick('C\'est combien ?')">💰 Prix ?</div>
-    <div class="qr" onclick="sendQuick('Vous livrez à Yaoundé ?')">🚚 Livraison ?</div>
-    <div class="qr" onclick="sendQuick('Je veux commander')">🛒 Commander</div>
-  </div>
-  <div class="lang-badge" id="lang-badge">🌍 Langue: Auto-détection</div>
-  <div class="input-row">
-    <textarea id="user-input" placeholder="Écrivez votre message..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-    <button id="send-btn" onclick="sendMessage()">→</button>
+<div class="notif-bar" id="notif-bar">🔴 Prospect CHAUD ! Commercial notifié sur WhatsApp</div>
+
+<div class="score-wrap">
+  <div class="score-badge COLD" id="score-badge">Score: 0 — COLD</div>
+</div>
+
+<div class="chat-bg" id="chat-area">
+  <div class="date-badge"><span>Aujourd'hui</span></div>
+  <div class="typing-wrap" id="typing-wrap">
+    <div class="typing-bubble">
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+      <div class="typing-dot"></div>
+    </div>
   </div>
 </div>
 
-<script type="module">
-// ─── ENGINE INTÉGRÉ (sans Firebase pour la démo) ─────────
-const messages = {
-  greeting: {
-    fr: ["Bonjour 😊 comment je peux vous aider ?","Salut 👋 vous cherchez quelque chose de précis ?"],
-    en: ["Hello 😊 how can I help you today?","Hi 👋 are you looking for something specific?"],
-    mix: ["Hello 😊 comment je peux vous aider today?","Salut 👋 what are you looking for?"]
-  },
-  qualification: {
-    fr: ["C'est pour quel usage exactement ?","Vous cherchez quel type précisément ?","Dites-moi plus, je vais trouver ce qu'il vous faut 😊"],
-    en: ["What exactly are you looking for?","What will you use it for?","Tell me more, I'll find exactly what you need 😊"],
-    mix: ["Tell me more, qu'est-ce qu'il vous faut exactement ?","C'est pour quel usage? What type do you need?"]
-  },
-  product_pitch: {
-    fr: ["On a exactement ce qu'il vous faut 🔥","Parfait ! J'ai quelque chose de très bien pour vous 😊","Bonne nouvelle — on a ça en stock ! 🎉"],
-    en: ["We have exactly what you need 🔥","Perfect! I have something great for you 😊","Good news — we have it in stock! 🎉"],
-    mix: ["On a exactly what you need 🔥","Good news — on a ça en stock! 🎉"]
-  },
-  closing: {
-    fr: ["Le prix commence à partir de 15 000 FCFA 😊 On valide la commande ?","Très abordable — entre 15 000 et 80 000 FCFA. Je vous réserve ça maintenant ?"],
-    en: ["Starting from 15,000 FCFA 😊 Should I confirm your order?","Very affordable — between 15,000 and 80,000 FCFA. Do you want me to reserve it now?"],
-    mix: ["Starting from 15,000 FCFA 😊 On valide la commande?"]
-  },
-  delivery: {
-    fr: ["On livre à Yaoundé sous 24h 🚚 Livraison gratuite pour vous !","Livraison disponible à Yaoundé et Douala — sous 24h ⚡"],
-    en: ["We deliver to Yaounde within 24h 🚚 Free delivery for you!","Delivery available in Yaounde and Douala — within 24h ⚡"],
-    mix: ["On livre à Yaoundé within 24h 🚚 livraison gratuite!"]
-  },
-  payment: {
-    fr: ["Paiement par MTN Money ou Orange Money 📱 Simple et rapide !","On accepte MTN, Orange et Wave — au choix 😊"],
-    en: ["Payment via MTN Money or Orange Money 📱 Quick and easy!","We accept MTN, Orange and Wave — your choice 😊"],
-    mix: ["Payment by MTN ou Orange Money 📱 Simple!"]
-  },
-  follow_up: {
-    fr: ["Vous êtes toujours intéressé(e) ? 😊","On a une offre spéciale pour vous aujourd'hui 🎁 -10% si vous commandez maintenant !"],
-    en: ["Are you still interested? 😊","Special offer just for you today 🎁 -10% if you order now!"],
-    mix: ["Still interested? On a une offre spéciale 🎁 -10% now!"]
-  },
-  not_understood: {
-    fr: ["Désolé, je n'ai pas bien compris 😅 Pouvez-vous reformuler ?","Hmm, dites-moi exactement ce que vous cherchez 😊"],
-    en: ["Sorry, I didn't quite get that 😅 Can you rephrase?","Hmm, tell me exactly what you're looking for 😊"],
-    mix: ["Sorry 😅 je n'ai pas bien compris. Can you rephrase?"]
-  }
+<div class="quick-replies">
+  <div class="qr" onclick="sendQuick('Bonjour 👋')">👋 Bonjour</div>
+  <div class="qr" onclick="sendQuick('Je cherche une robe')">👗 Je cherche</div>
+  <div class="qr" onclick="sendQuick('C\'est combien ?')">💰 Prix ?</div>
+  <div class="qr" onclick="sendQuick('Vous livrez à Yaoundé ?')">🚚 Livraison ?</div>
+  <div class="qr" onclick="sendQuick('Je veux commander')">🛒 Commander</div>
+  <div class="qr" onclick="sendQuick('I need a wig urgent')">🔴 Test HOT</div>
+</div>
+
+<div class="wa-input-wrap">
+  <button class="emoji-btn">😊</button>
+  <textarea id="user-input" placeholder="Message" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <button id="send-btn" onclick="sendMessage()">➤</button>
+</div>
+
+<script>
+const msgs = {
+  greeting:{fr:["Bonjour 😊 comment je peux vous aider ?","Salut 👋 vous cherchez quelque chose ?"],en:["Hello 😊 how can I help you?","Hi 👋 what are you looking for?"],mix:["Hello 😊 comment je peux vous aider today?"]},
+  qualification:{fr:["C'est pour quel usage exactement ?","Vous cherchez quel type précisément ?","Dites-moi plus 😊"],en:["What exactly are you looking for?","Tell me more 😊"],mix:["Tell me more, qu'est-ce qu'il vous faut?"]},
+  product_pitch:{fr:["On a exactement ce qu'il vous faut 🔥","Bonne nouvelle — on a ça en stock ! 🎉"],en:["We have exactly what you need 🔥","Good news — we have it in stock! 🎉"],mix:["On a exactly what you need 🔥"]},
+  closing:{fr:["Le prix commence à 15 000 FCFA 😊 On valide ?","Entre 15 000 et 80 000 FCFA. Je vous réserve ça ?"],en:["Starting from 15,000 FCFA 😊 Shall I confirm?"],mix:["Starting from 15,000 FCFA 😊 On valide?"]},
+  delivery:{fr:["On livre à Yaoundé sous 24h 🚚 Livraison gratuite !","Livraison Yaoundé et Douala — sous 24h ⚡"],en:["Delivery to Yaounde within 24h 🚚 Free!"],mix:["On livre à Yaoundé within 24h 🚚 Free!"]},
+  payment:{fr:["Paiement MTN Money ou Orange Money 📱","On accepte MTN, Orange et Wave 😊"],en:["Payment via MTN Money or Orange Money 📱"],mix:["Payment MTN ou Orange Money 📱"]},
+  follow_up:{fr:["Vous êtes toujours intéressé(e) ? 😊","Offre spéciale aujourd'hui 🎁 -10% !"],en:["Still interested? 😊","Special offer today 🎁 -10%!"],mix:["Still interested? Offre spéciale 🎁 -10%!"]},
+  not_understood:{fr:["Désolé, je n'ai pas compris 😅 Reformulez svp ?"],en:["Sorry, didn't get that 😅 Can you rephrase?"],mix:["Sorry 😅 je n'ai pas compris. Rephrase?"]}
 };
+const styles={fr:["tranquille 😄","on gère ça","pas de stress 👌"],en:["no worries 😄","we got you","it's all good 👌"],mix:["no worry 😄","on gère ça","we handle it 👌"]};
+let state={language:"fr",stage:"greeting",score:0,lead_status:"COLD"};
 
-const styles = {
-  fr: ["tranquille 😄", "on gère ça", "pas de stress"],
-  en: ["no worries 😄", "we got you", "it's all good"],
-  mix: ["no worry 😄", "on gère ça", "we handle it"]
-};
-
-let state = { language: "fr", stage: "greeting", score: 0, lead_status: "COLD" };
-
-function random(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-function detectLanguage(msg) {
-  msg = msg.toLowerCase();
-  const en = ["hello","hi","price","buy","need","how much","i want","i need","looking","available","delivery"];
-  const fr = ["bonjour","salut","prix","acheter","besoin","cherche","je veux","livraison","disponible","combien"];
-  let es = 0, fs = 0;
-  en.forEach(w => { if (msg.includes(w)) es++; });
-  fr.forEach(w => { if (msg.includes(w)) fs++; });
-  if (es > fs) return "en";
-  if (fs > es) return "fr";
-  if (es > 0 && fs > 0) return "mix";
-  return "fr";
+function rnd(arr){return arr[Math.floor(Math.random()*arr.length)];}
+function detectLang(msg){
+  msg=msg.toLowerCase();
+  const en=["hello","hi","price","buy","need","how much","i want","i need","looking","available","delivery","what"];
+  const fr=["bonjour","salut","prix","acheter","besoin","cherche","je veux","livraison","disponible","combien","merci","bonsoir"];
+  let es=0,fs=0;
+  en.forEach(w=>{if(msg.includes(w))es++;});
+  fr.forEach(w=>{if(msg.includes(w))fs++;});
+  if(es>fs)return"en";if(fs>es)return"fr";if(es>0&&fs>0)return"mix";return"fr";
 }
-
-function detectIntent(msg) {
-  msg = msg.toLowerCase();
-  if (["prix","price","combien","how much","tarif","coûte"].some(w => msg.includes(w))) return "closing";
-  if (["acheter","buy","commander","order","je prends","i'll take","je veux commander"].some(w => msg.includes(w))) return "closing";
-  if (["livraison","delivery","livrer","deliver","yaoundé","douala"].some(w => msg.includes(w))) return "delivery";
-  if (["mtn","orange money","wave","payer","payment"].some(w => msg.includes(w))) return "payment";
-  if (["cherche","need","looking","veux","want","besoin","disponible","vous avez","do you have"].some(w => msg.includes(w))) return "qualification";
-  if (["bonjour","hello","hi","salut","bonsoir"].some(w => msg.includes(w))) return "greeting";
-  return "not_understood";
+function detectIntent(msg){
+  msg=msg.toLowerCase();
+  if(["prix","price","combien","how much","tarif"].some(w=>msg.includes(w)))return"closing";
+  if(["acheter","buy","commander","order","je prends","valider"].some(w=>msg.includes(w)))return"closing";
+  if(["livraison","delivery","livrer","yaoundé","douala"].some(w=>msg.includes(w)))return"delivery";
+  if(["mtn","orange money","wave","payer","payment"].some(w=>msg.includes(w)))return"payment";
+  if(["cherche","need","looking","veux","want","besoin","disponible","vous avez"].some(w=>msg.includes(w)))return"qualification";
+  if(["bonjour","hello","hi","salut","bonsoir"].some(w=>msg.includes(w)))return"greeting";
+  return"not_understood";
 }
-
-function calculateScore(msg) {
-  msg = msg.toLowerCase();
-  let score = 0;
-  ["je cherche","je veux","i need","i want","looking for","besoin de"].forEach(w => { if (msg.includes(w)) score += 5; });
-  ["robe","chaussure","perruque","sac","téléphone","dress","shoes","wig","bag","phone","cosmétique"].forEach(w => { if (msg.includes(w)) score += 3; });
-  ["urgent","vite","asap","today","aujourd'hui","maintenant"].forEach(w => { if (msg.includes(w)) score += 2; });
-  ["yaoundé","douala","bafoussam","livraison","delivery"].forEach(w => { if (msg.includes(w)) score += 2; });
-  ["prix","price","combien","how much"].forEach(w => { if (msg.includes(w)) score += 1; });
+function calcScore(msg){
+  msg=msg.toLowerCase();let score=0;
+  ["je cherche","je veux","i need","i want","looking for","besoin"].forEach(w=>{if(msg.includes(w))score+=5;});
+  ["robe","chaussure","perruque","sac","téléphone","dress","shoes","wig","bag","phone","cosmétique"].forEach(w=>{if(msg.includes(w))score+=3;});
+  ["urgent","vite","asap","today","aujourd'hui","maintenant"].forEach(w=>{if(msg.includes(w))score+=2;});
+  ["yaoundé","douala","bafoussam","livraison","delivery"].forEach(w=>{if(msg.includes(w))score+=2;});
+  ["prix","price","combien","how much"].forEach(w=>{if(msg.includes(w))score+=1;});
   return score;
 }
+const flow={greeting:"qualification",qualification:"product_pitch",product_pitch:"closing",closing:"delivery",delivery:"payment",payment:"follow_up",follow_up:"follow_up",not_understood:"not_understood"};
 
-function filterLead(score) {
-  if (score >= 8) return "HOT";
-  if (score >= 5) return "WARM";
-  return "COLD";
-}
-
-const flow = { greeting:"qualification", qualification:"product_pitch", product_pitch:"closing", closing:"delivery", delivery:"payment", payment:"follow_up", follow_up:"follow_up", not_understood:"not_understood" };
-
-function processMessage(userMsg) {
-  const lang = detectLanguage(userMsg);
-  const intent = detectIntent(userMsg);
-  const score = state.score + calculateScore(userMsg);
-  const leadStatus = filterLead(score);
-  const nextStep = intent !== "not_understood" ? (flow[intent] || flow[state.stage]) : "not_understood";
-  const pool = messages[nextStep]?.[lang] || messages[nextStep]?.fr || ["Je suis là pour vous aider 😊"];
-  let reply = random(pool);
-  if (Math.random() > 0.5 && styles[lang]) { reply += " " + random(styles[lang]); }
-  state = { ...state, language: lang, stage: nextStep, score, lead_status: leadStatus };
+function processMsg(userMsg){
+  const lang=detectLang(userMsg);
+  const intent=detectIntent(userMsg);
+  const newScore=state.score+calcScore(userMsg);
+  const leadStatus=newScore>=8?"HOT":newScore>=5?"WARM":"COLD";
+  const nextStep=intent!=="not_understood"?(flow[intent]||flow[state.stage]):"not_understood";
+  const pool=msgs[nextStep]?.[lang]||msgs[nextStep]?.fr||["Je suis là pour vous aider 😊"];
+  let reply=rnd(pool);
+  if(Math.random()>0.5&&styles[lang])reply+=" "+rnd(styles[lang]);
+  state={...state,language:lang,stage:nextStep,score:newScore,lead_status:leadStatus};
   return reply;
 }
 
-function addMessage(text, sender) {
-  const area = document.getElementById("chat-area");
-  const typing = document.getElementById("typing");
-  const wrap = document.createElement("div");
-  wrap.className = `message-wrap ${sender}`;
-  const bubble = document.createElement("div");
-  bubble.className = `bubble bubble-${sender}`;
-  if (sender === "bot") {
-    const label = document.createElement("div");
-    label.className = "bot-label";
-    label.textContent = "🤖 GrowthAI Africa";
-    bubble.appendChild(label);
-  }
-  const p = document.createElement("p");
-  p.textContent = text;
-  bubble.appendChild(p);
-  const t = document.createElement("div");
-  t.className = "msg-time";
-  t.textContent = new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});
-  bubble.appendChild(t);
-  wrap.appendChild(bubble);
-  area.insertBefore(wrap, typing);
-  area.scrollTop = area.scrollHeight;
+function addMsg(text,type){
+  const area=document.getElementById("chat-area");
+  const tw=document.getElementById("typing-wrap");
+  const wrap=document.createElement("div");
+  wrap.className=`msg-wrap ${type==="bot"?"incoming":"outgoing"}`;
+  const bubble=document.createElement("div");
+  bubble.className=`bubble bubble-${type==="bot"?"in":"out"}`;
+  if(type==="bot"){const n=document.createElement("div");n.className="bot-name";n.textContent="🤖 GrowthAI Africa";bubble.appendChild(n);}
+  const p=document.createElement("p");p.textContent=text;bubble.appendChild(p);
+  const meta=document.createElement("div");meta.className="msg-meta";
+  const t=document.createElement("span");t.className="msg-time";t.textContent=new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"});meta.appendChild(t);
+  if(type==="user"){const tick=document.createElement("span");tick.className="msg-tick";tick.textContent="✓✓";meta.appendChild(tick);}
+  bubble.appendChild(meta);wrap.appendChild(bubble);
+  area.insertBefore(wrap,tw);area.scrollTop=area.scrollHeight;
 }
 
-function updateUI() {
-  const scoreBadge = document.getElementById("score-badge");
-  const leadBar = document.getElementById("lead-bar");
-  const langBadge = document.getElementById("lang-badge");
-  scoreBadge.textContent = `Score: ${state.score} — ${state.lead_status}`;
-  scoreBadge.style.color = state.lead_status === "HOT" ? "#ff4d4d" : state.lead_status === "WARM" ? "#f5a623" : "";
-  langBadge.textContent = `🌍 Langue: ${state.language === "fr" ? "Français" : state.language === "en" ? "English" : "Franglais"}`;
-  if (state.lead_status === "HOT") {
-    leadBar.textContent = "🔴 PROSPECT CHAUD — Notification envoyée au commercial !";
-    leadBar.className = "lead-bar hot";
-    leadBar.style.display = "block";
-  } else if (state.lead_status === "WARM") {
-    leadBar.textContent = "🟡 Prospect tiède — Relance prévue dans 6h";
-    leadBar.className = "lead-bar warm";
-    leadBar.style.display = "block";
+function updateUI(){
+  const badge=document.getElementById("score-badge");
+  const notif=document.getElementById("notif-bar");
+  const status=document.getElementById("wa-status");
+  badge.textContent=`Score: ${state.score} — ${state.lead_status}`;
+  badge.className=`score-badge ${state.lead_status}`;
+  if(state.lead_status==="HOT"){
+    notif.style.display="block";
+    status.textContent="🔴 Prospect chaud — Commercial notifié !";
+    status.style.color="#ff4d4d";
+    setTimeout(()=>{notif.style.display="none";},5000);
+  }else if(state.lead_status==="WARM"){
+    status.textContent="🟡 Prospect tiède — Relance dans 6h";
+    status.style.color="#f5a623";
   }
 }
 
-window.sendMessage = function() {
-  const input = document.getElementById("user-input");
-  const text = input.value.trim();
-  if (!text) return;
-  addMessage(text, "user");
-  input.value = "";
-  input.style.height = "auto";
-  document.getElementById("typing").style.display = "flex";
-  document.getElementById("chat-area").scrollTop = 9999;
-  setTimeout(() => {
-    document.getElementById("typing").style.display = "none";
-    const reply = processMessage(text);
-    addMessage(reply, "bot");
+window.sendMessage=function(){
+  const input=document.getElementById("user-input");
+  const text=input.value.trim();
+  if(!text)return;
+  addMsg(text,"user");
+  input.value="";input.style.height="auto";
+  const tw=document.getElementById("typing-wrap");
+  tw.style.display="flex";
+  document.getElementById("chat-area").scrollTop=9999;
+  setTimeout(()=>{
+    tw.style.display="none";
+    const reply=processMsg(text);
+    addMsg(reply,"bot");
     updateUI();
-  }, 800 + Math.random() * 700);
+  },800+Math.random()*700);
 };
+window.sendQuick=function(text){document.getElementById("user-input").value=text;window.sendMessage();};
+window.handleKey=function(e){if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();window.sendMessage();}};
+window.autoResize=function(el){el.style.height="auto";el.style.height=Math.min(el.scrollHeight,120)+"px";};
 
-window.sendQuick = function(text) {
-  document.getElementById("user-input").value = text;
-  window.sendMessage();
-};
-
-window.handleKey = function(e) {
-  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); window.sendMessage(); }
-};
-
-window.autoResize = function(el) {
-  el.style.height = "auto";
-  el.style.height = Math.min(el.scrollHeight, 100) + "px";
-};
-
-// Message de bienvenue
-setTimeout(() => {
-  addMessage("Bonjour 😊 Bienvenue chez GrowthAI Africa ! Comment puis-je vous aider aujourd'hui ?", "bot");
-}, 500);
+setTimeout(()=>{addMsg("Bonjour 😊 Bienvenue chez GrowthAI Africa ! Comment puis-je vous aider aujourd'hui ?","bot");},600);
 </script>
 </body>
 </html>
